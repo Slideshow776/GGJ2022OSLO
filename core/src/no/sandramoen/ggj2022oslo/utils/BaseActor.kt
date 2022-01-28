@@ -273,6 +273,24 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
         return Intersector.overlapConvexPolygons(poly1, poly2)
     }
 
+    fun preventOverlap(other: BaseActor): Vector2? {
+        val poly1: Polygon = this.getBoundaryPolygon()
+        val poly2: Polygon = other.getBoundaryPolygon()
+
+        // initial test to improve performance
+        if(!poly1.boundingRectangle.overlaps(poly2.boundingRectangle))
+            return null
+
+        val mtv = Intersector.MinimumTranslationVector()
+        val polygonOverlap = Intersector.overlapConvexPolygons(poly1, poly2, mtv)
+
+        if(!polygonOverlap)
+            return null
+
+        this.moveBy(mtv.normal.x * mtv.depth, mtv.normal.y * mtv.depth)
+        return mtv.normal
+    }
+
     // miscellaneous -------------------------------------------------------------------------------------------
     fun centerAtPosition(x: Float, y: Float) = setPosition(x - width / 2, y - height / 2)
     fun centerAtActor(other: BaseActor) = centerAtPosition(other.x + other.width / 2, other.y + other.height / 2)

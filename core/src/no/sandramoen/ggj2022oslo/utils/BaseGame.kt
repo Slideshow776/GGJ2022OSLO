@@ -7,6 +7,8 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture.TextureFilter
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -44,7 +46,9 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var textureAtlas: TextureAtlas? = null
         var soundVolume = .75f
         var musicVolume = .125f
-
+        var hurtSound: Sound? = null
+        var winSound: Sound? = null
+        var levelMusic: Music? = null
 
         // game state
 
@@ -64,11 +68,12 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             assetManager.load("images/included/packed/ggj2022oslo.pack.atlas", TextureAtlas::class.java)
 
             // music
-            // assetManager.load("audio/music/251461__joshuaempyre__arcade-music-loop.wav", Music::class.java)
+            assetManager.load("audio/music/396960__orginaljun__chiptune-loop-episode-01.wav", Music::class.java)
 
 
             // sounds
-            // assetManager.load("audio/sound/blip.wav", Sound::class.java)
+            assetManager.load("audio/sound/Hit_Hurt9.wav", Sound::class.java)
+            assetManager.load("audio/sound/Powerup42.wav", Sound::class.java)
 
 
             // fonts
@@ -92,9 +97,10 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             textureAtlas = assetManager.get("images/included/packed/ggj2022oslo.pack.atlas") // all images are found in this global static variable
 
             // audio
-            // levelMusic = assetManager.get("audio/music/251461__joshuaempyre__arcade-music-loop.wav", Music::class.java)
+            levelMusic = assetManager.get("audio/music/396960__orginaljun__chiptune-loop-episode-01.wav", Music::class.java)
 
-            // blipSound = assetManager.get("audio/sound/blip.wav", Sound::class.java)
+            winSound = assetManager.get("audio/sound/Powerup42.wav", Sound::class.java)
+            hurtSound = assetManager.get("audio/sound/Hit_Hurt9.wav", Sound::class.java)
 
             // text files
             // defaultShader = assetManager.get("shaders/default.vs", Text::class.java).getString()
