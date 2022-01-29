@@ -3,7 +3,6 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.ggj2022oslo.actors.*
@@ -16,8 +15,8 @@ import no.sandramoen.ggj2022oslo.utils.GameUtils
 open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     val tag = "LevelScreen"
 
-    private lateinit var woman: Player
-    private lateinit var man: Player
+    lateinit var woman: Player
+    lateinit var man: Player
     private lateinit var lazerBeam: LazerBeam
 
     private lateinit var winConditionLabel: Label
@@ -28,6 +27,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     private var timeTilGameOver: Int = 300
     private var timePassed: Float = 0f
     private var spawnBrokenHearts = true
+    private var gameOver = false
 
     override fun initialize() {
         Space(mainStage)
@@ -41,14 +41,6 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         woman.isVisible = false
         man.isVisible = false
         man.inPlay = false
-
-        woman.addAction(Actions.sequence(
-            Actions.delay(2f),
-            Actions.run {
-                HoveringLabel(woman.x, woman.y, mainStage)
-                HoveringLabel(man.x, man.y, mainStage)
-            }
-        ))
     }
 
     override fun update(dt: Float) {
@@ -58,8 +50,10 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         checkWinConditionAndCountTime(dt)
 
         handleLazerBeamComindDown()
+        checkAllGoldPickedUp()
+    }
 
-        // broken hearts
+    private fun checkAllGoldPickedUp() {
         if (BaseActor.count(mainStage, Gold::class.java.canonicalName) == 0 && spawnBrokenHearts) {
             spawnBrokenHearts = false
             HoveringLabel(woman.x, woman.y, mainStage)
@@ -71,6 +65,14 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
         return false
+    }
+
+    open fun cameraSetup() {
+        val temp = mainStage.camera as OrthographicCamera
+        temp.zoom = .6f // higher number = zoom in
+        temp.position.x = 350f
+        temp.position.y = 500f
+        temp.update()
     }
 
     private fun checkRockCollision() {
@@ -102,6 +104,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         winConditionLabel.isVisible = true
         restartLabel.isVisible = true
         winConditionLabel.setText("Game Over!")
+        gameOver = true
     }
 
     private fun checkGoldPickup() {
@@ -130,7 +133,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             woman.remove()
             man.remove()
             BaseGame.winSound!!.play(BaseGame.soundVolume)
-        } else if (time >= 0) {
+            gameOver = true
+        } else if (time >= 0 && !gameOver) {
             countTime(dt)
         }else {
             showGameOver()
@@ -178,14 +182,6 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         uiTable.add(restartLabel).padTop(padding).expandY().top()
 
         /*uiTable.debug = true*/
-    }
-
-    private fun cameraSetup() {
-        val temp = mainStage.camera as OrthographicCamera
-        temp.zoom = .6f // higher number = zoom in
-        temp.position.x = 350f
-        temp.position.y = 500f
-        temp.update()
     }
 
     private fun tiledSetup() {

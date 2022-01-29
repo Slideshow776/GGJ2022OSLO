@@ -105,7 +105,35 @@ goldenCup
   index: -1
 goldenCup-export
   rotate: false
+  xy: 990, 899
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+goldenCup1
+  rotate: false
   xy: 617, 163
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+heart1
+  rotate: false
+  xy: 617, 163
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+goldenCup2
+  rotate: false
+  xy: 956, 899
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+heart2
+  rotate: false
+  xy: 956, 899
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -115,20 +143,6 @@ ground
   xy: 956, 933
   size: 64, 64
   orig: 64, 64
-  offset: 0, 0
-  index: -1
-heart1
-  rotate: false
-  xy: 956, 899
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-heart2
-  rotate: false
-  xy: 990, 899
-  size: 32, 32
-  orig: 32, 32
   offset: 0, 0
   index: -1
 heartEffect0

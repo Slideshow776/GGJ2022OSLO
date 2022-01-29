@@ -2,6 +2,7 @@ package no.sandramoen.ggj2022oslo
 
 import no.sandramoen.ggj2022oslo.screens.gameplay.BaseLevelScreen
 import no.sandramoen.ggj2022oslo.screens.gameplay.Level1
+import no.sandramoen.ggj2022oslo.screens.gameplay.Level2
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 
 class GGJ2022OsloGame() : BaseGame() {

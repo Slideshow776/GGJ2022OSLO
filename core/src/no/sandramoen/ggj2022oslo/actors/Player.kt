@@ -24,6 +24,9 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     var oWidth = 0f
     var oHeight = 0f
 
+    var reversedHorizontal = true
+    var reversedVertical = false
+
     init {
         // animations
         var frameDuration = .25f
@@ -86,8 +89,8 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         setMaxSpeed(100f)
         setDeceleration(800f)
 
-        oWidth = width
-        oHeight = height
+        oWidth = width *1.25f
+        oHeight = height*1.25f
     }
 
     override fun act(dt: Float) {
@@ -95,19 +98,56 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         if (!inPlay) return
 
         // keys
-        if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
-            accelerateAtAngle(90f)
-        }
-        if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) {
-            if (woman) accelerateAtAngle(0f)
-            else accelerateAtAngle(180f)
-        }
-        if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S)) {
-            accelerateAtAngle(270f)
-        }
-        if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) {
-            if (woman) accelerateAtAngle(180f)
-            else accelerateAtAngle(0f)
+        if (reversedHorizontal && reversedVertical){
+            println("$tag: reversedHorizontal && reversedVertical")
+            if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
+                if (woman) accelerateAtAngle(90f)
+                else accelerateAtAngle(270f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) {
+                if (woman) accelerateAtAngle(0f)
+                else accelerateAtAngle(180f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S)) {
+                if (woman) accelerateAtAngle(270f)
+                else accelerateAtAngle(90f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) {
+                if (woman) accelerateAtAngle(180f)
+                else accelerateAtAngle(0f)
+            }
+        } else if (reversedVertical) {
+            println("$tag: reversedVertical")
+            if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
+                if (woman) accelerateAtAngle(90f)
+                else accelerateAtAngle(270f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) {
+                accelerateAtAngle(0f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S)) {
+                if (woman) accelerateAtAngle(270f)
+                else accelerateAtAngle(90f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) {
+                accelerateAtAngle(180f)
+            }
+        } else if (reversedHorizontal) {
+            println("$tag: reversedHorizontal")
+            if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
+                accelerateAtAngle(90f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) {
+                if (woman) accelerateAtAngle(0f)
+                else accelerateAtAngle(180f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S)) {
+                accelerateAtAngle(270f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) {
+                if (woman) accelerateAtAngle(180f)
+                else accelerateAtAngle(0f)
+            }
         }
 
         if (getSpeed() == 0f) {

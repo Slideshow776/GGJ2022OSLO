@@ -8,7 +8,7 @@ class Level1: BaseLevelScreen("level1") {
 
     override fun keyDown(keycode: Int): Boolean {
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-            BaseGame.setActiveScreen(Level1())
+            BaseGame.setActiveScreen(Level2())
         }
         return super.keyDown(keycode)
     }

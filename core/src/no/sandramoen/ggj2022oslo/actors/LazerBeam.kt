@@ -21,8 +21,9 @@ class LazerBeam(x: Float, y: Float, s: Stage, val comingDown: Boolean = true) : 
             setPosition(x, y + 1_000f)
         BaseGame.lazerBeamSound!!.play(BaseGame.soundVolume, 1.5f, 0f)
 
+        val duration = if (comingDown) .25f else .0f
         addAction(Actions.sequence(
-            Actions.delay(.25f),
+            Actions.delay(duration),
             Actions.run {
                 for (i in 0 until 20) {
                     val effect = HeartEffect()
