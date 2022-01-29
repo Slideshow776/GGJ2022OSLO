@@ -3,9 +3,11 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.ggj2022oslo.actors.*
+import no.sandramoen.ggj2022oslo.actors.effects.StarEffect
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.BaseScreen
@@ -20,6 +22,12 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
 
     private lateinit var winConditionLabel: Label
     private lateinit var restartLabel: Label
+    private lateinit var timeLabel: Label
+
+    private var time: Int = 0
+    private var timeTilGameOver: Int = 300
+    private var timePassed: Float = 0f
+    private var spawnBrokenHearts = true
 
     override fun initialize() {
         Space(mainStage)
@@ -33,15 +41,32 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         woman.isVisible = false
         man.isVisible = false
         man.inPlay = false
+
+        woman.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.run {
+                HoveringLabel(woman.x, woman.y, mainStage)
+                HoveringLabel(man.x, man.y, mainStage)
+            }
+        ))
     }
 
     override fun update(dt: Float) {
         checkRockCollision()
         checkGoldPickup()
         checkIfPlayerIsOnGround()
-        checkWinCondition()
+        checkWinConditionAndCountTime(dt)
 
         handleLazerBeamComindDown()
+
+        // broken hearts
+        if (BaseActor.count(mainStage, Gold::class.java.canonicalName) == 0 && spawnBrokenHearts) {
+            spawnBrokenHearts = false
+            HoveringLabel(woman.x, woman.y, mainStage)
+            HoveringLabel(man.x, man.y, mainStage)
+            Heartbroken(woman.x, woman.y, mainStage)
+            Heartbroken(man.x, man.y, mainStage)
+        }
     }
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
@@ -68,11 +93,15 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             if (!isTouchingGround) { // game over
                 playerActor.remove()
                 BaseGame.hurtSound!!.play(BaseGame.soundVolume)
-                winConditionLabel.isVisible = true
-                restartLabel.isVisible = true
-                winConditionLabel.setText("Game Over!")
+                showGameOver()
             }
         }
+    }
+
+    private fun showGameOver() {
+        winConditionLabel.isVisible = true
+        restartLabel.isVisible = true
+        winConditionLabel.setText("Game Over!")
     }
 
     private fun checkGoldPickup() {
@@ -80,22 +109,41 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             for (playerActor: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
                 playerActor as Player
                 if (playerActor.overlaps(winActor)) {
-                    winActor.remove()
                     BaseGame.goldSound!!.play(BaseGame.soundVolume)
+                    val effect = StarEffect()
+                    effect.setScale(Gdx.graphics.height * .0002f)
+                    effect.setPosition(winActor.x + 10f, winActor.y + 20f)
+                    mainStage.addActor(effect)
+                    effect.start()
+                    winActor.remove()
                 }
             }
         }
     }
 
-    private fun checkWinCondition() {
+    private fun checkWinConditionAndCountTime(dt: Float) {
         if (woman.overlaps(man) && BaseActor.count(mainStage, Gold::class.java.canonicalName) == 0 && !winConditionLabel.isVisible) {
+            // WIN!
             winConditionLabel.isVisible = true
             restartLabel.isVisible = true
             LazerBeam(woman.x, woman.y, mainStage, comingDown = false)
             woman.remove()
             man.remove()
             BaseGame.winSound!!.play(BaseGame.soundVolume)
+        } else if (time >= 0) {
+            countTime(dt)
+        }else {
+            showGameOver()
+            woman.remove()
+            man.remove()
         }
+    }
+
+    private fun countTime(dt: Float) {
+        timePassed += dt
+        time = timeTilGameOver - timePassed.toInt()
+        if (time >= 0)
+            timeLabel.setText("Time: $time")
     }
 
     private fun handleLazerBeamComindDown() {
@@ -109,6 +157,13 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     }
 
     private fun uiSetup() {
+        val padding = Gdx.graphics.height * .01f
+
+        timeLabel = Label("Time: 0", BaseGame.labelStyle)
+        timeLabel.setFontScale(.5f)
+        timeLabel.setAlignment(Align.center)
+        uiTable.add(timeLabel).expandY().top().padTop(padding).row()
+
         winConditionLabel = Label("A winner is you!", BaseGame.labelStyle)
         winConditionLabel.setFontScale(.7f)
         winConditionLabel.setAlignment(Align.center)
@@ -120,7 +175,9 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         restartLabel.color = Color.GRAY
         restartLabel.setAlignment(Align.center)
         restartLabel.isVisible = false
-        uiTable.add(restartLabel).padTop(Gdx.graphics.height * .01f)
+        uiTable.add(restartLabel).padTop(padding).expandY().top()
+
+        /*uiTable.debug = true*/
     }
 
     private fun cameraSetup() {

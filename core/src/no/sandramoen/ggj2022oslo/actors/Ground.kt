@@ -9,5 +9,6 @@ class Ground(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
     init {
         loadImage("ground")
         setBoundaryPolygon(8)
+        isVisible = false
     }
 }

@@ -27,7 +27,7 @@ public class DesktopLauncher {
 
         // miscellaneous
         config.title = "GGJ2022!    Binary Non-binary";
-        config.resizable = false;
+        config.resizable = true;
         // config.addIcon("images/excluded/ic_launcher-desktop.png", Files.FileType.Internal);
 
 

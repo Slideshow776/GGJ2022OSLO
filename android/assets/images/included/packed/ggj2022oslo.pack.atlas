@@ -98,63 +98,154 @@ filter: Nearest, Nearest
 repeat: none
 goldenCup
   rotate: false
-  xy: 154, 184
+  xy: 896, 849
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-man0
+goldenCup-export
   rotate: false
-  xy: 154, 184
+  xy: 617, 163
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 ground
   rotate: false
-  xy: 804, 954
+  xy: 956, 933
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+heart1
+  rotate: false
+  xy: 956, 899
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+heart2
+  rotate: false
+  xy: 990, 899
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+heartEffect0
+  rotate: false
+  xy: 204, 2
+  size: 100, 85
+  orig: 100, 85
+  offset: 0, 0
+  index: -1
+heartEffect1
+  rotate: false
+  xy: 331, 110
+  size: 100, 85
+  orig: 100, 85
+  offset: 0, 0
+  index: -1
+heartEffect2
+  rotate: false
+  xy: 433, 114
+  size: 90, 81
+  orig: 90, 81
+  offset: 0, 0
+  index: -1
+heartEffect3
+  rotate: false
+  xy: 804, 694
+  size: 90, 83
+  orig: 90, 83
+  offset: 0, 0
+  index: -1
+heartEffect4
+  rotate: false
+  xy: 804, 612
+  size: 90, 80
+  orig: 90, 80
+  offset: 0, 0
+  index: -1
+heartEffect5
+  rotate: false
+  xy: 804, 779
+  size: 90, 102
+  orig: 90, 102
+  offset: 0, 0
+  index: -1
+heartEffect6
+  rotate: false
+  xy: 525, 145
+  size: 90, 50
+  orig: 90, 50
+  offset: 0, 0
+  index: -1
+heartEffect7
+  rotate: false
+  xy: 204, 89
+  size: 125, 106
+  orig: 125, 106
+  offset: 0, 0
+  index: -1
+heartbroken
+  rotate: false
+  xy: 804, 512
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 lazerBeam
   rotate: false
-  xy: 804, 920
+  xy: 896, 815
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 man
   rotate: false
-  xy: 870, 986
+  xy: 651, 163
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+man0
+  rotate: false
+  xy: 804, 478
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 rock
   rotate: false
-  xy: 2, 36
+  xy: 804, 546
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+roundStar
+  rotate: false
+  xy: 2, 2
+  size: 200, 193
+  orig: 200, 193
+  offset: 0, 0
+  index: -1
 vignette
   rotate: false
-  xy: 2, 218
+  xy: 2, 197
   size: 800, 800
   orig: 800, 800
   offset: 0, 0
   index: -1
 whitePixel_BIG
   rotate: false
-  xy: 2, 102
+  xy: 804, 883
   size: 150, 114
   orig: 150, 114
   offset: 0, 0
   index: -1
 woman
   rotate: false
-  xy: 2, 2
+  xy: 896, 781
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

@@ -21,6 +21,9 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
 
     private var currentAnimation: Animation<TextureAtlas.AtlasRegion>
 
+    var oWidth = 0f
+    var oHeight = 0f
+
     init {
         // animations
         var frameDuration = .25f
@@ -82,6 +85,9 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         setAcceleration(800f)
         setMaxSpeed(100f)
         setDeceleration(800f)
+
+        oWidth = width
+        oHeight = height
     }
 
     override fun act(dt: Float) {
@@ -111,27 +117,30 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
             val angle = getMotionAngle()
             if (angle >= 45 && angle <= 135) {
                 if (currentAnimation != upAnimation) {
-                    setAnimation(upAnimation)
-                    currentAnimation = upAnimation
+                    setTheAnimation(upAnimation)
                 }
             } else if (angle > 135 && angle < 225) {
                 if (currentAnimation != leftAnimation) {
-                    setAnimation(leftAnimation)
-                    currentAnimation = leftAnimation
+                    setTheAnimation(leftAnimation)
                 }
             } else if (angle >= 225 && angle <= 315) {
                 if (currentAnimation != downAnimation) {
-                    setAnimation(downAnimation)
-                    currentAnimation = downAnimation
+                    setTheAnimation(downAnimation)
                 }
             } else {
                 if (currentAnimation != rightAnimation) {
-                    setAnimation(rightAnimation)
-                    currentAnimation = rightAnimation
+                    setTheAnimation(rightAnimation)
                 }
             }
         }
-
         applyPhysics(dt)
+    }
+
+    private fun setTheAnimation(animation: Animation<TextureAtlas.AtlasRegion>) {
+        setAnimation(animation)
+        currentAnimation = animation
+        setSize(width / 1.5f, height / 1.5f)
+        setAnimationSize(oWidth, oHeight)
+        setBoundaryRectangle()
     }
 }

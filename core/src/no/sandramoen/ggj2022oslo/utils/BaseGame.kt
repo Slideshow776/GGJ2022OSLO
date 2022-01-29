@@ -51,6 +51,8 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var winSound: Sound? = null
         var lazerBeamSound: Sound? = null
         var levelMusic: Music? = null
+        var defaultShader: String? = null
+        var glowShader: String? = null
 
         // game state
 
@@ -97,6 +99,10 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             // i18n
             // assetManager.load("i18n/MyBundle", I18NBundle::class.java, I18NBundleParameter(Locale(currentLocale)))
 
+            // shaders
+            assetManager.load(AssetDescriptor("shaders/default.vs", Text::class.java, TextLoader.TextParameter()))
+            assetManager.load(AssetDescriptor("shaders/glow-pulse.fs", Text::class.java, TextLoader.TextParameter()))
+
             assetManager.finishLoading()
 
             textureAtlas = assetManager.get("images/included/packed/ggj2022oslo.pack.atlas") // all images are found in this global static variable
@@ -110,8 +116,8 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             lazerBeamSound = assetManager.get("audio/sound/Laser_Shoot12.wav", Sound::class.java)
 
             // text files
-            // defaultShader = assetManager.get("shaders/default.vs", Text::class.java).getString()
-            // vignetteShader = assetManager.get("shaders/vignette.fs", Text::class.java).getString()
+            defaultShader = assetManager.get("shaders/default.vs", Text::class.java).getString()
+            glowShader = assetManager.get("shaders/glow-pulse.fs", Text::class.java).getString()
 
             // skin
             // skin = assetManager.get("skins/arcade/arcade.json", Skin::class.java)

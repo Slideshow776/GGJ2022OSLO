@@ -1,8 +1,10 @@
 package no.sandramoen.ggj2022oslo.actors
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Align
+import no.sandramoen.ggj2022oslo.actors.effects.HeartEffect
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 
@@ -18,6 +20,19 @@ class LazerBeam(x: Float, y: Float, s: Stage, val comingDown: Boolean = true) : 
         if (comingDown)
             setPosition(x, y + 1_000f)
         BaseGame.lazerBeamSound!!.play(BaseGame.soundVolume, 1.5f, 0f)
+
+        addAction(Actions.sequence(
+            Actions.delay(.25f),
+            Actions.run {
+                for (i in 0 until 20) {
+                    val effect = HeartEffect()
+                    effect.setScale(Gdx.graphics.height * .0004f)
+                    effect.setPosition(x + 10f, targetY + 50f)
+                    stage.addActor(effect)
+                    effect.start()
+                }
+            }
+        ))
     }
 
     override fun act(dt: Float) {
