@@ -4,10 +4,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 
-class Heartbroken(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
+class Heartbroken(x: Float, y: Float, s: Stage, woman: Boolean = true) : BaseActor(x, y, s) {
     init {
         loadImage("heartbroken")
         setPosition(x + 20f, y + 40f)
+
+        if (woman)
+            flip()
 
         // animation
         val wobbleDuration = .05f

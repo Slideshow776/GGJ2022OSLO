@@ -3,6 +3,8 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.ggj2022oslo.actors.*
@@ -28,12 +30,12 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     private var timePassed: Float = 0f
     private var spawnBrokenHearts = true
     private var gameOver = false
+    var lost = false
 
     override fun initialize() {
         Space(mainStage)
         tiledSetup()
         cameraSetup()
-        GameUtils.playAndLoopMusic(BaseGame.levelMusic)
         uiSetup()
 
         lazerBeam = LazerBeam(woman.x, woman.y, mainStage)
@@ -41,6 +43,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         woman.isVisible = false
         man.isVisible = false
         man.inPlay = false
+
+        Overlay(0f, 0f, mainStage, comingIn = true)
     }
 
     override fun update(dt: Float) {
@@ -59,7 +63,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             HoveringLabel(woman.x, woman.y, mainStage)
             HoveringLabel(man.x, man.y, mainStage)
             Heartbroken(woman.x, woman.y, mainStage)
-            Heartbroken(man.x, man.y, mainStage)
+            Heartbroken(man.x, man.y, mainStage, woman = false)
         }
     }
 
@@ -69,8 +73,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
 
     open fun cameraSetup() {
         val temp = mainStage.camera as OrthographicCamera
-        temp.zoom = .6f // higher number = zoom in
-        temp.position.x = 350f
+        temp.zoom = .7f // higher number = zoom out
+        temp.position.x = 350f // higher number = world to the left
         temp.position.y = 500f
         temp.update()
     }
@@ -104,7 +108,17 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         winConditionLabel.isVisible = true
         restartLabel.isVisible = true
         winConditionLabel.setText("Game Over!")
+        restartLabel.setText("press 'R' to restart")
+        GameUtils.stopAllMusic()
+        val temp = BaseActor(0f, 0f, mainStage)
+        temp.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.run {
+                GameUtils.stopAllMusic()
+            }
+        ))
         gameOver = true
+        lost = true
     }
 
     private fun checkGoldPickup() {
@@ -112,7 +126,11 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             for (playerActor: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
                 playerActor as Player
                 if (playerActor.overlaps(winActor)) {
-                    BaseGame.goldSound!!.play(BaseGame.soundVolume)
+                    if (MathUtils.randomBoolean()) {
+                        BaseGame.trophyLSound!!.play(BaseGame.soundVolume)
+                    } else {
+                        BaseGame.trophyRSound!!.play(BaseGame.soundVolume)
+                    }
                     val effect = StarEffect()
                     effect.setScale(Gdx.graphics.height * .0002f)
                     effect.setPosition(winActor.x + 10f, winActor.y + 20f)
@@ -136,7 +154,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             gameOver = true
         } else if (time >= 0 && !gameOver) {
             countTime(dt)
-        }else {
+        }else if (time <= 0f){
             showGameOver()
             woman.remove()
             man.remove()
@@ -151,12 +169,11 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     }
 
     private fun handleLazerBeamComindDown() {
-        if (lazerBeam != null && lazerBeam.animationFinished && lazerBeam.comingDown) {
+        if (lazerBeam != null && lazerBeam.animationFinished && lazerBeam.comingDown && !woman.inPlay) {
             woman.inPlay = true
             woman.isVisible = true
             man.isVisible = true
             man.inPlay = true
-            lazerBeam.remove()
         }
     }
 
@@ -174,7 +191,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         winConditionLabel.isVisible = false
         uiTable.add(winConditionLabel).row()
 
-        restartLabel = Label("press 'R' to restart", BaseGame.labelStyle)
+        restartLabel = Label("press 'R' for next level!", BaseGame.labelStyle)
         restartLabel.setFontScale(.5f)
         restartLabel.color = Color.GRAY
         restartLabel.setAlignment(Align.center)

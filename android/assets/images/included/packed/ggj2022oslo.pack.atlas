@@ -266,6 +266,19 @@ woman
   index: -1
 
 ggj2022oslo.pack8.png
+size: 512, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+overlay
+  rotate: false
+  xy: 2, 2
+  size: 387, 290
+  orig: 387, 290
+  offset: 0, 0
+  index: -1
+
+ggj2022oslo.pack9.png
 size: 512, 64
 format: RGBA8888
 filter: Nearest, Nearest
@@ -355,7 +368,7 @@ man/man9
   offset: 0, 0
   index: -1
 
-ggj2022oslo.pack9.png
+ggj2022oslo.pack10.png
 size: 256, 128
 format: RGBA8888
 filter: Nearest, Nearest
@@ -375,7 +388,7 @@ UI/button-pressed
   offset: 0, 0
   index: -1
 
-ggj2022oslo.pack10.png
+ggj2022oslo.pack11.png
 size: 512, 64
 format: RGBA8888
 filter: Nearest, Nearest

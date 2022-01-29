@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import com.badlogic.gdx.utils.Array
 import no.sandramoen.ggj2022oslo.utils.BaseGame
+import no.sandramoen.ggj2022oslo.utils.GameUtils
 
 class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActor(x, y, s) {
     val tag = "Player"
@@ -99,7 +100,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
 
         // keys
         if (reversedHorizontal && reversedVertical){
-            println("$tag: reversedHorizontal && reversedVertical")
+            // println("$tag: reversedHorizontal && reversedVertical")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 if (woman) accelerateAtAngle(90f)
                 else accelerateAtAngle(270f)
@@ -117,7 +118,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
                 else accelerateAtAngle(0f)
             }
         } else if (reversedVertical) {
-            println("$tag: reversedVertical")
+            // println("$tag: reversedVertical")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 if (woman) accelerateAtAngle(90f)
                 else accelerateAtAngle(270f)
@@ -133,7 +134,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
                 accelerateAtAngle(180f)
             }
         } else if (reversedHorizontal) {
-            println("$tag: reversedHorizontal")
+            // println("$tag: reversedHorizontal")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 accelerateAtAngle(90f)
             }
@@ -152,7 +153,14 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
 
         if (getSpeed() == 0f) {
             setAnimationPaused(true)
+            if (woman) BaseGame.stepsRMusic!!.stop()
+            else BaseGame.stepsLMusic!!.stop()
         } else {
+            if (woman && !BaseGame.stepsRMusic!!.isPlaying) {
+                GameUtils.playAndLoopMusic(BaseGame.stepsRMusic)
+            } else if (!woman && !BaseGame.stepsLMusic!!.isPlaying) {
+                GameUtils.playAndLoopMusic(BaseGame.stepsLMusic)
+            }
             setAnimationPaused(false)
             val angle = getMotionAngle()
             if (angle >= 45 && angle <= 135) {
@@ -179,7 +187,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     private fun setTheAnimation(animation: Animation<TextureAtlas.AtlasRegion>) {
         setAnimation(animation)
         currentAnimation = animation
-        setSize(width / 1.5f, height / 1.5f)
+        setSize(width / 1.0f, height / 1.0f)
         setAnimationSize(oWidth, oHeight)
         setBoundaryRectangle()
     }

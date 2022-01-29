@@ -24,12 +24,19 @@ class GameUtils {
             return event is InputEvent && event.type == InputEvent.Type.touchDown
         }
 
+        fun stopAllMusic() {
+            BaseGame.levelMusic!!.stop()
+            BaseGame.introMusic!!.stop()
+            BaseGame.stepsRMusic!!.stop()
+            BaseGame.stepsLMusic!!.stop()
+        }
+
         /**
-         * Play, set volume and loop [music].
+         * Play, set [volume] and loop [music].
          */
-        fun playAndLoopMusic(music: Music?) {
+        fun playAndLoopMusic(music: Music?, volume: Float = BaseGame.musicVolume) {
             music!!.play()
-            music!!.volume = BaseGame.musicVolume
+            music!!.volume = volume
             music!!.isLooping = true
         }
 
