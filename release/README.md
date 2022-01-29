@@ -9,4 +9,4 @@
       2. Navigate to the file `$cd [path]`.
       3. Run `$java -jar "Binary Non-Binary.jar"`.
  
-Game controls: WASD and Key Arrows + mouse
+Game controls: WASD and Key Arrows
