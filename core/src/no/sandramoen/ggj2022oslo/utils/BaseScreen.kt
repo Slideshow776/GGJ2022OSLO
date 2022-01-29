@@ -24,7 +24,7 @@ abstract class BaseScreen : Screen, InputProcessor {
         uiTable.setFillParent(true)
         uiStage.addActor(uiTable)
 
-        initialize()
+        // initialize()
     }
 
     abstract fun initialize()

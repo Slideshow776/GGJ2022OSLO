@@ -8,6 +8,6 @@ class Rock(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
     init {
         loadImage("rock")
-        setBoundaryPolygon(8)
+        setBoundaryRectangle()
     }
 }

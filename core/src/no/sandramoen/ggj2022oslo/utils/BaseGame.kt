@@ -47,12 +47,17 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var soundVolume = .75f
         var musicVolume = .125f
         var hurtSound: Sound? = null
+        var goldSound: Sound? = null
         var winSound: Sound? = null
+        var lazerBeamSound: Sound? = null
         var levelMusic: Music? = null
 
         // game state
 
-        fun setActiveScreen(s: BaseScreen) { game?.setScreen(s) }
+        fun setActiveScreen(s: BaseScreen) {
+            s.initialize()
+            game?.setScreen(s)
+        }
     }
 
     override fun create() {
@@ -70,11 +75,11 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             // music
             assetManager.load("audio/music/396960__orginaljun__chiptune-loop-episode-01.wav", Music::class.java)
 
-
             // sounds
             assetManager.load("audio/sound/Hit_Hurt9.wav", Sound::class.java)
             assetManager.load("audio/sound/Powerup42.wav", Sound::class.java)
-
+            assetManager.load("audio/sound/Powerup43.wav", Sound::class.java)
+            assetManager.load("audio/sound/Laser_Shoot12.wav", Sound::class.java)
 
             // fonts
             val resolver = InternalFileHandleResolver()
@@ -99,8 +104,10 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             // audio
             levelMusic = assetManager.get("audio/music/396960__orginaljun__chiptune-loop-episode-01.wav", Music::class.java)
 
-            winSound = assetManager.get("audio/sound/Powerup42.wav", Sound::class.java)
+            goldSound = assetManager.get("audio/sound/Powerup42.wav", Sound::class.java)
             hurtSound = assetManager.get("audio/sound/Hit_Hurt9.wav", Sound::class.java)
+            winSound = assetManager.get("audio/sound/Powerup43.wav", Sound::class.java)
+            lazerBeamSound = assetManager.get("audio/sound/Laser_Shoot12.wav", Sound::class.java)
 
             // text files
             // defaultShader = assetManager.get("shaders/default.vs", Text::class.java).getString()
