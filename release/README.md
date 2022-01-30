@@ -1,6 +1,7 @@
 # Installing the Game
 ## To play on Desktop:
 [Java](www.java.com/) must be installed on your device.
+[GitHub Pages](https://pages.github.com/)
 1. Click `Binary Non-Binary`.
 2. Click "Download".
 3. Double click to run.
