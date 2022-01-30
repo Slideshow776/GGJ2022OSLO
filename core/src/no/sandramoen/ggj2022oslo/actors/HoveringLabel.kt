@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 
-class HoveringLabel(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
+class HoveringLabel(x: Float, y: Float, s: Stage, woman: Boolean = true) : BaseActor(x, y, s) {
     init {
         var text = ""
         when (MathUtils.random(1, 11)) {
@@ -27,7 +27,8 @@ class HoveringLabel(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
         }
         val label = Label("$text", BaseGame.labelStyle)
         label.setFontScale(.2f)
-        label.color = Color.PINK
+        if (woman) label.color = Color.PINK
+        else label.color = Color.CYAN
         setPosition(x - label.prefWidth / 2, y)
         addActor(label)
 

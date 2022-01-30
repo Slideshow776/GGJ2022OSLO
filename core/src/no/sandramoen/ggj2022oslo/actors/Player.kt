@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import com.badlogic.gdx.utils.Array
 import no.sandramoen.ggj2022oslo.utils.BaseGame
@@ -13,20 +14,17 @@ import no.sandramoen.ggj2022oslo.utils.GameUtils
 class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActor(x, y, s) {
     val tag = "Player"
     var inPlay = true
+    var oWidth = 0f
+    var oHeight = 0f
+    var reversedHorizontal = true
+    var reversedVertical = false
 
-    // animations
+    private var alive = true
     private var upAnimation: Animation<TextureAtlas.AtlasRegion>
     private var downAnimation: Animation<TextureAtlas.AtlasRegion>
     private var leftAnimation: Animation<TextureAtlas.AtlasRegion>
     private var rightAnimation: Animation<TextureAtlas.AtlasRegion>
-
     private var currentAnimation: Animation<TextureAtlas.AtlasRegion>
-
-    var oWidth = 0f
-    var oHeight = 0f
-
-    var reversedHorizontal = true
-    var reversedVertical = false
 
     init {
         // animations
@@ -36,50 +34,58 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman4"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman5"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman6"))
-            upAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            upAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
 
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman1"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman2"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman3"))
-            downAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            downAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
 
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman10"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman11"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman12"))
-            leftAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            leftAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
 
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman7"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman8"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman9"))
-            rightAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            rightAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
         } else {
             var animationImages: Array<TextureAtlas.AtlasRegion> = Array()
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man4"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man5"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man6"))
-            upAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            upAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
 
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man1"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man2"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man3"))
-            downAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            downAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
 
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man10"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man11"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man12"))
-            leftAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            leftAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
 
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man7"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man8"))
             animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man9"))
-            rightAnimation = Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            rightAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
             animationImages.clear()
         }
 
@@ -90,8 +96,8 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         setMaxSpeed(100f)
         setDeceleration(800f)
 
-        oWidth = width *1.25f
-        oHeight = height*1.25f
+        oWidth = width * 1.25f
+        oHeight = height * 1.25f
     }
 
     override fun act(dt: Float) {
@@ -99,7 +105,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         if (!inPlay) return
 
         // keys
-        if (reversedHorizontal && reversedVertical){
+        if (reversedHorizontal && reversedVertical) {
             // println("$tag: reversedHorizontal && reversedVertical")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 if (woman) accelerateAtAngle(90f)
@@ -149,6 +155,20 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
                 if (woman) accelerateAtAngle(180f)
                 else accelerateAtAngle(0f)
             }
+        } else {
+            // println("$tag: no reverse")
+            if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
+                accelerateAtAngle(90f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) {
+                accelerateAtAngle(0f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S)) {
+                accelerateAtAngle(270f)
+            }
+            if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) {
+                accelerateAtAngle(180f)
+            }
         }
 
         if (getSpeed() == 0f) {
@@ -182,6 +202,22 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
             }
         }
         applyPhysics(dt)
+    }
+
+    fun removeMe() {
+        if (alive) {
+            alive = false
+            if (woman) BaseGame.deathRSound!!.play(BaseGame.soundVolume)
+            else BaseGame.deathLSound!!.play(BaseGame.soundVolume)
+            setSpeed(getSpeed() * 5)
+            addAction(Actions.sequence(
+                Actions.parallel(
+                    Actions.scaleTo(0f, 0f, .4f),
+                    Actions.fadeOut(.4f)
+                ),
+                Actions.run { remove() }
+            ))
+        }
     }
 
     private fun setTheAnimation(animation: Animation<TextureAtlas.AtlasRegion>) {

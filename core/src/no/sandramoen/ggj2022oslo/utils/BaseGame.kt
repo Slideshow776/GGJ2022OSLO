@@ -46,13 +46,13 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var textureAtlas: TextureAtlas? = null
         var soundVolume = .75f
         var musicVolume = .125f
-        var hurtSound: Sound? = null
-        var goldSound: Sound? = null
-        var winSound: Sound? = null
+        var deathLSound: Sound? = null
+        var deathRSound: Sound? = null
         var trophyLSound: Sound? = null
         var trophyRSound: Sound? = null
         var lazerBeamDownSound: Sound? = null
         var lazerBeamUpSound: Sound? = null
+        var missYouSound: Sound? = null
         var levelMusic: Music? = null
         var introMusic: Music? = null
         var stepsRMusic: Music? = null
@@ -87,14 +87,13 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             assetManager.load("audio/music/BNB_SFX_STEPS_L_LOOP.wav", Music::class.java)
 
             // sounds
-            assetManager.load("audio/sound/Hit_Hurt9.wav", Sound::class.java)
-            assetManager.load("audio/sound/Powerup42.wav", Sound::class.java)
-            assetManager.load("audio/sound/Powerup43.wav", Sound::class.java)
-            assetManager.load("audio/sound/Laser_Shoot12.wav", Sound::class.java)
             assetManager.load("audio/sound/BNB_SFX_TRANS_UP.wav", Sound::class.java)
             assetManager.load("audio/sound/BNB_SFX_TRANS_DOWN.wav", Sound::class.java)
             assetManager.load("audio/sound/BNB_SFX_TROPHY_L.wav", Sound::class.java)
             assetManager.load("audio/sound/BNB_SFX_TROPHY_R.wav", Sound::class.java)
+            assetManager.load("audio/sound/BNB_SFX_DEATH_L.wav", Sound::class.java)
+            assetManager.load("audio/sound/BNB_SFX_DEATH_R.wav", Sound::class.java)
+            assetManager.load("audio/sound/BNB_SFX_MISS_YOU.wav", Sound::class.java)
 
             // fonts
             val resolver = InternalFileHandleResolver()
@@ -126,13 +125,13 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             stepsRMusic = assetManager.get("audio/music/BNB_SFX_STEPS_R_LOOP.wav", Music::class.java)
             stepsLMusic = assetManager.get("audio/music/BNB_SFX_STEPS_L_LOOP.wav", Music::class.java)
 
-            goldSound = assetManager.get("audio/sound/Powerup42.wav", Sound::class.java)
-            hurtSound = assetManager.get("audio/sound/Hit_Hurt9.wav", Sound::class.java)
-            winSound = assetManager.get("audio/sound/Powerup43.wav", Sound::class.java)
+            deathLSound = assetManager.get("audio/sound/BNB_SFX_DEATH_L.wav", Sound::class.java)
+            deathRSound = assetManager.get("audio/sound/BNB_SFX_DEATH_R.wav", Sound::class.java)
             lazerBeamUpSound = assetManager.get("audio/sound/BNB_SFX_TRANS_UP.wav", Sound::class.java)
             lazerBeamDownSound = assetManager.get("audio/sound/BNB_SFX_TRANS_DOWN.wav", Sound::class.java)
             trophyLSound = assetManager.get("audio/sound/BNB_SFX_TROPHY_L.wav", Sound::class.java)
             trophyRSound = assetManager.get("audio/sound/BNB_SFX_TROPHY_R.wav", Sound::class.java)
+            missYouSound = assetManager.get("audio/sound/BNB_SFX_MISS_YOU.wav", Sound::class.java)
 
             // text files
             defaultShader = assetManager.get("shaders/default.vs", Text::class.java).getString()

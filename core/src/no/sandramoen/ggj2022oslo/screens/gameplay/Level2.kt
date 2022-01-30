@@ -29,8 +29,8 @@ class Level2 : BaseLevelScreen("level2") {
             temp.addAction(Actions.sequence(
                 Actions.delay(.5f),
                 Actions.run {
-                    if (lost) BaseGame.setActiveScreen(Level2())
-                    else BaseGame.setActiveScreen(Level1())
+                    if (lostTheGame) BaseGame.setActiveScreen(Level2())
+                    else BaseGame.setActiveScreen(Level3())
                 }
             ))
         }

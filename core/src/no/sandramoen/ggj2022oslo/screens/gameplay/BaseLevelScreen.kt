@@ -30,7 +30,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     private var timePassed: Float = 0f
     private var spawnBrokenHearts = true
     private var gameOver = false
-    var lost = false
+    var lostTheGame = false
 
     override fun initialize() {
         Space(mainStage)
@@ -61,7 +61,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         if (BaseActor.count(mainStage, Gold::class.java.canonicalName) == 0 && spawnBrokenHearts) {
             spawnBrokenHearts = false
             HoveringLabel(woman.x, woman.y, mainStage)
-            HoveringLabel(man.x, man.y, mainStage)
+            HoveringLabel(man.x, man.y, mainStage, woman = false)
+            BaseGame.missYouSound!!.play(BaseGame.soundVolume)
             Heartbroken(woman.x, woman.y, mainStage)
             Heartbroken(man.x, man.y, mainStage, woman = false)
         }
@@ -97,8 +98,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
                 }
             }
             if (!isTouchingGround) { // game over
-                playerActor.remove()
-                BaseGame.hurtSound!!.play(BaseGame.soundVolume)
+                playerActor as Player
+                playerActor.removeMe()
                 showGameOver()
             }
         }
@@ -118,7 +119,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             }
         ))
         gameOver = true
-        lost = true
+        lostTheGame = true
     }
 
     private fun checkGoldPickup() {
@@ -150,7 +151,6 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             LazerBeam(woman.x, woman.y, mainStage, comingDown = false)
             woman.remove()
             man.remove()
-            BaseGame.winSound!!.play(BaseGame.soundVolume)
             gameOver = true
         } else if (time >= 0 && !gameOver) {
             countTime(dt)
@@ -214,7 +214,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             Ground(props.get("x") as Float, props.get("y") as Float, mainStage)
         }
 
-        val startPoint = tma.getTileList("start")[0]
+        val startPoint = tma.getTileList("start")[0] // TODO: Warning: will crash if there is no start point in map
         val props = startPoint.properties
         woman = Player(props.get("x") as Float, props.get("y") as Float, mainStage)
         man = Player(props.get("x") as Float, props.get("y") as Float, mainStage, woman = false)
