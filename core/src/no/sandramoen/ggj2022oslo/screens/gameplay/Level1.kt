@@ -2,6 +2,7 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import no.sandramoen.ggj2022oslo.actors.Overlay
 import no.sandramoen.ggj2022oslo.utils.BaseActor
@@ -26,4 +27,14 @@ class Level1: BaseLevelScreen("level1") {
         }
         return super.keyDown(keycode)
     }
+
+    /*override fun cameraSetup() {
+        super.cameraSetup()
+
+        val temp = mainStage.camera as OrthographicCamera
+        temp.zoom = .4f // higher number = zoom out
+        temp.position.x = 380f // higher number = world to the left
+        temp.position.y = 500f
+        temp.update()
+    }*/
 }

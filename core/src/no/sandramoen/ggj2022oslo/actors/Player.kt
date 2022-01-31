@@ -173,13 +173,13 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
 
         if (getSpeed() == 0f) {
             setAnimationPaused(true)
-            if (woman) BaseGame.stepsRMusic!!.stop()
-            else BaseGame.stepsLMusic!!.stop()
+            if (woman) BaseGame.stepsRMusic!!.volume = 0f
+            else BaseGame.stepsLMusic!!.volume = 0f
         } else {
-            if (woman && !BaseGame.stepsRMusic!!.isPlaying) {
-                GameUtils.playAndLoopMusic(BaseGame.stepsRMusic)
-            } else if (!woman && !BaseGame.stepsLMusic!!.isPlaying) {
-                GameUtils.playAndLoopMusic(BaseGame.stepsLMusic)
+            if (woman) {
+                BaseGame.stepsRMusic!!.volume = BaseGame.musicVolume
+            } else if (!woman) {
+                BaseGame.stepsLMusic!!.volume = BaseGame.musicVolume
             }
             setAnimationPaused(false)
             val angle = getMotionAngle()

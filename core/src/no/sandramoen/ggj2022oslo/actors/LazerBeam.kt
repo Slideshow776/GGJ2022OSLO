@@ -30,6 +30,8 @@ class LazerBeam(x: Float, y: Float, s: Stage, val comingDown: Boolean = true) : 
                 Actions.delay(2f),
                 Actions.run {
                     GameUtils.playAndLoopMusic(BaseGame.levelMusic)
+                    GameUtils.playAndLoopMusic(BaseGame.stepsRMusic)
+                    GameUtils.playAndLoopMusic(BaseGame.stepsLMusic)
                 }
             ))
 
