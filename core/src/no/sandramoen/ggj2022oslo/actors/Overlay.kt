@@ -1,14 +1,20 @@
 package no.sandramoen.ggj2022oslo.actors
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 
 class Overlay(x: Float, y: Float, s: Stage, comingIn: Boolean = true) : BaseActor(x, y, s) {
+    val tag = "Overlay"
+
     init {
         loadImage("overlay")
-        setSize(Gdx.graphics.width.toFloat() * 2f, Gdx.graphics.height.toFloat() * .9f)
+        if (Gdx.app.type == Application.ApplicationType.Android)
+            setSize(Gdx.graphics.width.toFloat() * 2f, Gdx.graphics.height.toFloat() * .5f)
+        else
+            setSize(Gdx.graphics.width.toFloat() * 2f, Gdx.graphics.height.toFloat() * .9f)
 
         if (comingIn) {
             setPosition(x, y + 70)
