@@ -13,7 +13,7 @@ Game controls: WASD and Arrow Keys.
       
 ## To play on Andoid:
 1. Click `Binary Non-Binary.apk`
-2. Download the file.
+2. Download the file via clicking the lowest three dots `...`.
 3. Consent to any warnings about installing the app
 4. Install and play
 
