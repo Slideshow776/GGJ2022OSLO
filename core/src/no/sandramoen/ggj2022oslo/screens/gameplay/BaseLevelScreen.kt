@@ -1,5 +1,6 @@
 package no.sandramoen.ggj2022oslo.screens.gameplay
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
@@ -67,22 +68,33 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         }
     }
 
-    override fun scrolled(amountX: Float, amountY: Float): Boolean { return false }
+    override fun scrolled(amountX: Float, amountY: Float): Boolean {
+        return false
+    }
 
     open fun cameraSetup() {}
 
     private fun checkRockCollision() {
         for (rockActor: BaseActor in BaseActor.getList(mainStage, Rock::class.java.canonicalName)) {
-            for (player: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
+            for (player: BaseActor in BaseActor.getList(
+                mainStage,
+                Player::class.java.canonicalName
+            )) {
                 player.preventOverlap(rockActor)
             }
         }
     }
 
     private fun checkIfPlayerIsOnGround() {
-        for (playerActor: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
+        for (playerActor: BaseActor in BaseActor.getList(
+            mainStage,
+            Player::class.java.canonicalName
+        )) {
             var isTouchingGround = false
-            for (groundActor: BaseActor in BaseActor.getList(mainStage, Ground::class.java.canonicalName)) {
+            for (groundActor: BaseActor in BaseActor.getList(
+                mainStage,
+                Ground::class.java.canonicalName
+            )) {
                 if (playerActor.overlaps(groundActor)) {
                     isTouchingGround = true
                     break
@@ -100,7 +112,10 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         winConditionLabel.isVisible = true
         restartLabel.isVisible = true
         winConditionLabel.setText("Game Over!")
-        restartLabel.setText("press 'R' to restart")
+        if (Gdx.app.type == Application.ApplicationType.Android)
+            restartLabel.setText("press 'BACK' to restart")
+        else
+            restartLabel.setText("press 'R' to restart")
         GameUtils.stopAllMusic()
         val temp = BaseActor(0f, 0f, mainStage)
         temp.addAction(Actions.sequence(
@@ -115,7 +130,10 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
 
     private fun checkGoldPickup() {
         for (winActor: BaseActor in BaseActor.getList(mainStage, Gold::class.java.canonicalName)) {
-            for (playerActor: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
+            for (playerActor: BaseActor in BaseActor.getList(
+                mainStage,
+                Player::class.java.canonicalName
+            )) {
                 playerActor as Player
                 if (playerActor.overlaps(winActor)) {
                     if (MathUtils.randomBoolean()) {
@@ -135,7 +153,11 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     }
 
     private fun checkWinConditionAndCountTime(dt: Float) {
-        if (woman.overlaps(man) && BaseActor.count(mainStage, Gold::class.java.canonicalName) == 0 && !winConditionLabel.isVisible) {
+        if (woman.overlaps(man) && BaseActor.count(
+                mainStage,
+                Gold::class.java.canonicalName
+            ) == 0 && !winConditionLabel.isVisible
+        ) {
             // WIN!
             winConditionLabel.isVisible = true
             restartLabel.isVisible = true
@@ -145,7 +167,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             gameOver = true
         } else if (time >= 0 && !gameOver) {
             countTime(dt)
-        }else if (time <= 0f){
+        } else if (time <= 0f) {
             showGameOver()
             woman.remove()
             man.remove()
@@ -182,7 +204,10 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         winConditionLabel.isVisible = false
         uiTable.add(winConditionLabel).row()
 
-        restartLabel = Label("press 'R' for next level!", BaseGame.labelStyle)
+        if (Gdx.app.type == Application.ApplicationType.Android)
+            restartLabel = Label("press 'BACK' for next level!", BaseGame.labelStyle)
+        else
+            restartLabel = Label("press 'R' for next level!", BaseGame.labelStyle)
         restartLabel.setFontScale(.5f)
         restartLabel.color = Color.GRAY
         restartLabel.setAlignment(Align.center)
@@ -205,7 +230,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             Ground(props.get("x") as Float, props.get("y") as Float, mainStage)
         }
 
-        val startPoint = tma.getTileList("start")[0] // TODO: Warning: will crash if there is no start point in map
+        val startPoint =
+            tma.getTileList("start")[0] // TODO: Warning: will crash if there is no start point in map
         val props = startPoint.properties
         woman = Player(props.get("x") as Float, props.get("y") as Float, mainStage)
         man = Player(props.get("x") as Float, props.get("y") as Float, mainStage, woman = false)

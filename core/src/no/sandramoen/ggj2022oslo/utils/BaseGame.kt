@@ -46,7 +46,7 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var textButtonStyle: TextButtonStyle? = null
         var textureAtlas: TextureAtlas? = null
         var soundVolume = .75f
-        var musicVolume = .125f
+        var musicVolume = .5f
         var deathLSound: Sound? = null
         var deathRSound: Sound? = null
         var trophyLSound: Sound? = null
