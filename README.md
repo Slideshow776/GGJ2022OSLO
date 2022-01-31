@@ -4,7 +4,7 @@
 ![image](https://user-images.githubusercontent.com/4059636/151701109-c0a11a9d-26d9-4803-9a4b-acaad35b452e.png)
 
 
-[Play it](https://github.com/Slideshow776/GGJ2022OSLO/tree/master/release) for free on desktop!
+[Play it](https://github.com/Slideshow776/GGJ2022OSLO/tree/master/release) for free on Desktop and Android!
 
 [Youtube video of gameplay](https://www.youtube.com/watch?v=rLwWrdM9x9E)
 
