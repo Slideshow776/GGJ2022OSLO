@@ -92,104 +92,104 @@ space5
   index: -1
 
 ggj2022oslo.pack7.png
-size: 1024, 1024
+size: 1024, 512
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 goldenCup
   rotate: false
-  xy: 896, 849
+  xy: 483, 339
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 goldenCup-export
   rotate: false
-  xy: 990, 899
+  xy: 483, 305
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 goldenCup1
   rotate: false
-  xy: 617, 163
+  xy: 987, 455
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 heart1
   rotate: false
-  xy: 617, 163
+  xy: 987, 455
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 goldenCup2
   rotate: false
-  xy: 956, 899
+  xy: 331, 97
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 heart2
   rotate: false
-  xy: 956, 899
+  xy: 331, 97
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 ground
   rotate: false
-  xy: 956, 933
+  xy: 921, 423
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 heartEffect0
   rotate: false
-  xy: 204, 2
+  xy: 543, 402
   size: 100, 85
   orig: 100, 85
   offset: 0, 0
   index: -1
 heartEffect1
   rotate: false
-  xy: 331, 110
+  xy: 204, 2
   size: 100, 85
   orig: 100, 85
   offset: 0, 0
   index: -1
 heartEffect2
   rotate: false
-  xy: 433, 114
+  xy: 737, 406
   size: 90, 81
   orig: 90, 81
   offset: 0, 0
   index: -1
 heartEffect3
   rotate: false
-  xy: 804, 694
+  xy: 645, 404
   size: 90, 83
   orig: 90, 83
   offset: 0, 0
   index: -1
 heartEffect4
   rotate: false
-  xy: 804, 612
+  xy: 829, 407
   size: 90, 80
   orig: 90, 80
   offset: 0, 0
   index: -1
 heartEffect5
   rotate: false
-  xy: 804, 779
+  xy: 391, 269
   size: 90, 102
   orig: 90, 102
   offset: 0, 0
   index: -1
 heartEffect6
   rotate: false
-  xy: 525, 145
+  xy: 391, 217
   size: 90, 50
   orig: 90, 50
   offset: 0, 0
@@ -203,35 +203,42 @@ heartEffect7
   index: -1
 heartbroken
   rotate: false
-  xy: 804, 512
+  xy: 483, 271
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 lazerBeam
   rotate: false
-  xy: 896, 815
+  xy: 483, 237
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 man
   rotate: false
-  xy: 651, 163
+  xy: 987, 421
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 man0
   rotate: false
-  xy: 804, 478
+  xy: 365, 97
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+overlay
+  rotate: false
+  xy: 2, 197
+  size: 387, 290
+  orig: 387, 290
+  offset: 0, 0
+  index: -1
 rock
   rotate: false
-  xy: 804, 546
+  xy: 331, 131
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -243,42 +250,22 @@ roundStar
   orig: 200, 193
   offset: 0, 0
   index: -1
-vignette
-  rotate: false
-  xy: 2, 197
-  size: 800, 800
-  orig: 800, 800
-  offset: 0, 0
-  index: -1
 whitePixel_BIG
   rotate: false
-  xy: 804, 883
+  xy: 391, 373
   size: 150, 114
   orig: 150, 114
   offset: 0, 0
   index: -1
 woman
   rotate: false
-  xy: 896, 781
+  xy: 543, 368
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 
 ggj2022oslo.pack8.png
-size: 512, 512
-format: RGBA8888
-filter: Nearest, Nearest
-repeat: none
-overlay
-  rotate: false
-  xy: 2, 2
-  size: 387, 290
-  orig: 387, 290
-  offset: 0, 0
-  index: -1
-
-ggj2022oslo.pack9.png
 size: 512, 64
 format: RGBA8888
 filter: Nearest, Nearest
@@ -368,7 +355,7 @@ man/man9
   offset: 0, 0
   index: -1
 
-ggj2022oslo.pack10.png
+ggj2022oslo.pack9.png
 size: 256, 128
 format: RGBA8888
 filter: Nearest, Nearest
@@ -388,7 +375,7 @@ UI/button-pressed
   offset: 0, 0
   index: -1
 
-ggj2022oslo.pack11.png
+ggj2022oslo.pack10.png
 size: 512, 64
 format: RGBA8888
 filter: Nearest, Nearest

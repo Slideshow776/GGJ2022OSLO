@@ -41,7 +41,7 @@
    </properties>
   </tile>
  </tileset>
- <imagelayer id="3" name="Image Layer 1">
+ <imagelayer id="3" name="Image Layer 1" visible="0">
   <image source="space.png" width="1024" height="1024"/>
  </imagelayer>
  <layer id="7" name="Tile Layer 1" width="32" height="32">

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 
-class Space(s: Stage) : BaseActor(0f, 0f, s) {
+class Background(s: Stage) : BaseActor(0f, 0f, s) {
     private lateinit var image00: BaseActor
     private lateinit var image01: BaseActor
 
@@ -23,12 +23,13 @@ class Space(s: Stage) : BaseActor(0f, 0f, s) {
     private lateinit var image50: BaseActor
     private lateinit var image51: BaseActor
 
-    private val layer0Speed = .1f
-    private val layer1Speed = .2f
-    private val layer2Speed = .3f
-    private val layer3Speed = .4f
-    private val layer4Speed = .5f
-    private val layer5Speed = .6f
+    private val speedControl = 1.0f
+    private val layer0Speed = .1f * speedControl
+    private val layer1Speed = .2f * speedControl
+    private val layer2Speed = .3f * speedControl
+    private val layer3Speed = .4f * speedControl
+    private val layer4Speed = .5f * speedControl
+    private val layer5Speed = .6f * speedControl
 
     init {
         layer0Setup(s)
@@ -52,10 +53,12 @@ class Space(s: Stage) : BaseActor(0f, 0f, s) {
     private fun layer0Setup(s: Stage) {
         image00 = BaseActor(0f, 0f, s)
         image00.loadImage("space0")
+        image00.scaleY = 1.1f
 
         image01 = BaseActor(image00.width, 0f, s)
         image01.loadImage("space0")
         image01.scaleX = 1.1f // overlapping hack
+        image01.scaleY = 1.1f
     }
 
     private fun layer1Setup(s: Stage) {

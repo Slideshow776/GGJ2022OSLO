@@ -2,7 +2,6 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -33,7 +32,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     var lostTheGame = false
 
     override fun initialize() {
-        Space(mainStage)
+        Background(mainStage)
         tiledSetup()
         cameraSetup()
         uiSetup()
@@ -68,17 +67,9 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
         }
     }
 
-    override fun scrolled(amountX: Float, amountY: Float): Boolean {
-        return false
-    }
+    override fun scrolled(amountX: Float, amountY: Float): Boolean { return false }
 
-    open fun cameraSetup() {
-        val temp = mainStage.camera as OrthographicCamera
-        temp.zoom = .7f // higher number = zoom out
-        temp.position.x = 350f // higher number = world to the left
-        temp.position.y = 500f
-        temp.update()
-    }
+    open fun cameraSetup() {}
 
     private fun checkRockCollision() {
         for (rockActor: BaseActor in BaseActor.getList(mainStage, Rock::class.java.canonicalName)) {

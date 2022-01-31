@@ -2,6 +2,7 @@ package no.sandramoen.ggj2022oslo.utils
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
@@ -69,6 +70,7 @@ abstract class BaseGame() : Game(), AssetErrorListener {
     }
 
     override fun create() {
+        Gdx.input.setCatchKey(Input.Keys.BACK, true) // so that android doesn't exit game on back button
         Gdx.input.inputProcessor = InputMultiplexer() // discrete input
 
         // global variables
