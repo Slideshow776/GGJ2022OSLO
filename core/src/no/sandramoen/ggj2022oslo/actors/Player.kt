@@ -1,5 +1,6 @@
 package no.sandramoen.ggj2022oslo.actors
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.Animation
@@ -18,6 +19,9 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     var oHeight = 0f
     var reversedHorizontal = true
     var reversedVertical = false
+
+    var joystickActive = false
+    var joystickAngle = 0f
 
     private var alive = true
     private var upAnimation: Animation<TextureAtlas.AtlasRegion>
@@ -104,7 +108,106 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         super.act(dt)
         if (!inPlay) return
 
-        // keys
+        if (Gdx.app.type == Application.ApplicationType.Android) {
+            if (joystickActive) androidControls()
+        }
+        else {
+            desktopControls()
+        }
+
+        if (getSpeed() == 0f) {
+            setAnimationPaused(true)
+            if (woman) BaseGame.stepsRMusic!!.volume = 0f
+            else BaseGame.stepsLMusic!!.volume = 0f
+        } else {
+            if (woman) {
+                BaseGame.stepsRMusic!!.volume = BaseGame.soundVolume * .25f
+            } else if (!woman) {
+                BaseGame.stepsLMusic!!.volume = BaseGame.soundVolume * .25f
+            }
+            setAnimationPaused(false)
+            val angle = getMotionAngle()
+            if (angle >= 45 && angle <= 135) {
+                if (currentAnimation != upAnimation) {
+                    setTheAnimation(upAnimation)
+                }
+            } else if (angle > 135 && angle < 225) {
+                if (currentAnimation != leftAnimation) {
+                    setTheAnimation(leftAnimation)
+                }
+            } else if (angle >= 225 && angle <= 315) {
+                if (currentAnimation != downAnimation) {
+                    setTheAnimation(downAnimation)
+                }
+            } else {
+                if (currentAnimation != rightAnimation) {
+                    setTheAnimation(rightAnimation)
+                }
+            }
+        }
+        applyPhysics(dt)
+    }
+
+    fun removeMe() {
+        if (alive) {
+            alive = false
+            if (woman) BaseGame.deathRSound!!.play(BaseGame.soundVolume)
+            else BaseGame.deathLSound!!.play(BaseGame.soundVolume)
+            setSpeed(getSpeed() * 5)
+            addAction(Actions.sequence(
+                Actions.parallel(
+                    Actions.scaleTo(0f, 0f, .4f),
+                    Actions.fadeOut(.4f)
+                ),
+                Actions.run { remove() }
+            ))
+        }
+    }
+
+    private fun androidControls() {
+        if (reversedHorizontal && reversedVertical) {
+            Gdx.app.error(tag, "reversedHorizontal && reversedVertical")
+            if (woman) accelerateAtAngle(joystickAngle)
+            else accelerateAtAngle(joystickAngle + 180)
+        } else if (reversedVertical) {
+            if (joystickAngle >= 45 && joystickAngle <= 135) { // up
+                if (woman) accelerateAtAngle(90f)
+                else accelerateAtAngle(270f)
+            } else if (joystickAngle > 135 && joystickAngle < 225) { // left
+                accelerateAtAngle(180f)
+            } else if (joystickAngle >= 225 && joystickAngle <= 315) { // down
+                if (woman) accelerateAtAngle(270f)
+                else accelerateAtAngle(90f)
+            } else { // right
+                accelerateAtAngle(0f)
+            }
+        } else if (reversedHorizontal) {
+            if (joystickAngle >= 45 && joystickAngle <= 135) { // up
+                accelerateAtAngle(90f)
+            } else if (joystickAngle > 135 && joystickAngle < 225) { // left
+                if (woman) accelerateAtAngle(180f)
+                else accelerateAtAngle(0f)
+            } else if (joystickAngle >= 225 && joystickAngle <= 315) { // down
+                accelerateAtAngle(270f)
+            } else { // right
+                if (woman) accelerateAtAngle(0f)
+                else accelerateAtAngle(180f)
+            }
+
+        } else {
+            if (joystickAngle >= 45 && joystickAngle <= 135) { // up
+                accelerateAtAngle(90f)
+            } else if (joystickAngle > 135 && joystickAngle < 225) { // left
+                accelerateAtAngle(joystickAngle)
+            } else if (joystickAngle >= 225 && joystickAngle <= 315) { // down
+                accelerateAtAngle(270f)
+            } else { // right
+                accelerateAtAngle(joystickAngle)
+            }
+        }
+    }
+
+    private fun desktopControls() {
         if (reversedHorizontal && reversedVertical) {
             // println("$tag: reversedHorizontal && reversedVertical")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
@@ -169,54 +272,6 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
             if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) {
                 accelerateAtAngle(180f)
             }
-        }
-
-        if (getSpeed() == 0f) {
-            setAnimationPaused(true)
-            if (woman) BaseGame.stepsRMusic!!.volume = 0f
-            else BaseGame.stepsLMusic!!.volume = 0f
-        } else {
-            if (woman) {
-                BaseGame.stepsRMusic!!.volume = BaseGame.musicVolume
-            } else if (!woman) {
-                BaseGame.stepsLMusic!!.volume = BaseGame.musicVolume
-            }
-            setAnimationPaused(false)
-            val angle = getMotionAngle()
-            if (angle >= 45 && angle <= 135) {
-                if (currentAnimation != upAnimation) {
-                    setTheAnimation(upAnimation)
-                }
-            } else if (angle > 135 && angle < 225) {
-                if (currentAnimation != leftAnimation) {
-                    setTheAnimation(leftAnimation)
-                }
-            } else if (angle >= 225 && angle <= 315) {
-                if (currentAnimation != downAnimation) {
-                    setTheAnimation(downAnimation)
-                }
-            } else {
-                if (currentAnimation != rightAnimation) {
-                    setTheAnimation(rightAnimation)
-                }
-            }
-        }
-        applyPhysics(dt)
-    }
-
-    fun removeMe() {
-        if (alive) {
-            alive = false
-            if (woman) BaseGame.deathRSound!!.play(BaseGame.soundVolume)
-            else BaseGame.deathLSound!!.play(BaseGame.soundVolume)
-            setSpeed(getSpeed() * 5)
-            addAction(Actions.sequence(
-                Actions.parallel(
-                    Actions.scaleTo(0f, 0f, .4f),
-                    Actions.fadeOut(.4f)
-                ),
-                Actions.run { remove() }
-            ))
         }
     }
 

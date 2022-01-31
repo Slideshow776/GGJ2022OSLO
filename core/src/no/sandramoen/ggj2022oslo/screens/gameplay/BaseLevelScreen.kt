@@ -3,9 +3,15 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.ggj2022oslo.actors.*
 import no.sandramoen.ggj2022oslo.actors.effects.StarEffect
@@ -13,6 +19,7 @@ import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.BaseScreen
 import no.sandramoen.ggj2022oslo.utils.GameUtils
+import kotlin.math.atan2
 
 open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     val tag = "LevelScreen"
@@ -30,6 +37,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     private var timePassed: Float = 0f
     private var spawnBrokenHearts = true
     private var gameOver = false
+    private lateinit var joystickPosition: Vector3
+
     var lostTheGame = false
 
     override fun initialize() {
@@ -70,6 +79,35 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
         return false
+    }
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        joystickPosition = mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(),0f))
+        woman.joystickActive = true
+        man.joystickActive = true
+
+        return super.touchDown(screenX, screenY, pointer, button)
+    }
+
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        woman.joystickActive = false
+        man.joystickActive = false
+        return super.touchUp(screenX, screenY, pointer, button)
+    }
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
+        val worldCoordinates = mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(),0f))
+
+        var angle = Math.toDegrees(atan2(
+            worldCoordinates.y - joystickPosition.y,
+            worldCoordinates.x - joystickPosition.x
+        ).toDouble()).toFloat()
+        if (angle < 0) angle += 360f
+
+        woman.joystickAngle = angle
+        man.joystickAngle = angle
+
+        return super.touchDragged(screenX, screenY, pointer)
     }
 
     open fun cameraSetup() {}
