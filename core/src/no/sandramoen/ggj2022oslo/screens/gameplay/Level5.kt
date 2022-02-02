@@ -58,8 +58,8 @@ class Level5(private var incomingScore: Int) : BaseLevelScreen("level5", incomin
         changingScreen = true
         GameUtils.stopAllMusic()
         Overlay(0f, 0f, mainStage, comingIn = false)
-        if (!completedTheGame)
-            scoreLabel.setText("Score: 0")
+        /*if (!completedTheGame)
+            scoreLabel.setText("Score: $incomingScore")*/
         val temp = BaseActor(0f, 0f, mainStage)
         temp.addAction(
             Actions.sequence(
@@ -70,7 +70,7 @@ class Level5(private var incomingScore: Int) : BaseLevelScreen("level5", incomin
                         if (completedTheGame)
                             BaseGame.setActiveScreen(Level6(score))
                         else
-                            BaseGame.setActiveScreen(Level6(0))
+                            BaseGame.setActiveScreen(Level6(incomingScore))
                     }
                 }
             ))

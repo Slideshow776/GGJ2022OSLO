@@ -22,7 +22,7 @@ class Level1() : BaseLevelScreen("level1", 0) {
                 levelAttemptOver()
             }
         })
-        if (!BaseGame.loadPersonalParameters) {
+        if (Gdx.app.type == Application.ApplicationType.Android && !BaseGame.loadPersonalParameters) {
             scoreLabel.addAction(Actions.sequence(
                 Actions.delay(5f),
                 Actions.fadeOut(.5f),
@@ -73,8 +73,8 @@ class Level1() : BaseLevelScreen("level1", 0) {
         changingScreen = true
         GameUtils.stopAllMusic()
         Overlay(0f, 0f, mainStage, comingIn = false)
-        if (!completedTheGame)
-            scoreLabel.setText("Score: 0")
+        /*if (!completedTheGame)
+            scoreLabel.setText("Score: 0")*/
         val temp = BaseActor(0f, 0f, mainStage)
         temp.addAction(
             Actions.sequence(
