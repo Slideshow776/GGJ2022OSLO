@@ -54,11 +54,11 @@ class ScoreScreen(var score: Int) : BaseScreen() {
         val camera = mainStage.camera as OrthographicCamera
         if (Gdx.app.type == Application.ApplicationType.Android) {
             camera.zoom = .4f // higher number = zoom out
+            camera.position.x = 350f // higher number = world to the left
+            camera.position.y = 500f
         } else {
             camera.zoom = .7f // higher number = zoom out
         }
-        /*camera.position.x = 350f // higher number = world to the left
-        camera.position.y = 500f*/
         camera.update()
     }
 
