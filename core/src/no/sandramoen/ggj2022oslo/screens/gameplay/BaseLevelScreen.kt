@@ -32,10 +32,11 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     private var accumulatedScore: Int = maxLevelScore + incomingScore
     private var timePassed: Float = 0f
     private var spawnBrokenHearts = true
-    private var gameOver = false
+    var gameOver = false
     private lateinit var joystickPosition: Vector3
     open var changingScreen = false
     open var completedTheGame = false
+    open var tutorial = false
 
     var lostTheGame = false
 
@@ -153,7 +154,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
         restartLabel.isVisible = true
         winConditionLabel.setText("Game Over!")
         if (Gdx.app.type == Application.ApplicationType.Android)
-            restartLabel.setText("press 'BACK' to restart")
+            restartLabel.setText("Touch to restart")
         else
             restartLabel.setText("press 'R' to restart")
         GameUtils.stopAllMusic()
@@ -213,7 +214,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     private fun calculatAndSetScore(dt: Float) {
         timePassed += dt
         score = accumulatedScore - timePassed.toInt()
-        if (score >= 0 && !changingScreen)
+        if (score >= 0 && !changingScreen && !tutorial)
             scoreLabel.setText("Score: $score")
     }
 
@@ -232,7 +233,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
         scoreLabel = Label("Score: 0", BaseGame.labelStyle)
         scoreLabel.setFontScale(.5f)
         scoreLabel.setAlignment(Align.center)
-        uiTable.add(scoreLabel).expandY().top().padTop(padding).row()
+        uiTable.add(scoreLabel).expandY().top().padTop(padding).width(Gdx.graphics.width * .5f).height(Gdx.graphics.height * .05f).row()
 
         winConditionLabel = Label("A winner is you!", BaseGame.labelStyle)
         winConditionLabel.setFontScale(.7f)
@@ -241,7 +242,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
         uiTable.add(winConditionLabel).row()
 
         if (Gdx.app.type == Application.ApplicationType.Android)
-            restartLabel = Label("press 'BACK' for next level!", BaseGame.labelStyle)
+            restartLabel = Label("Touch for next level!", BaseGame.labelStyle)
         else
             restartLabel = Label("press 'R' for next level!", BaseGame.labelStyle)
         restartLabel.setFontScale(.5f)

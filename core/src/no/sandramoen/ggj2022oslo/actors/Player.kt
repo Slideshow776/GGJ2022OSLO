@@ -111,8 +111,8 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
 
         if (Gdx.app.type == Application.ApplicationType.Android) {
             if (joystickActive) androidControls()
-        }
-        else {
+        } else {
+            if (joystickActive) androidControls()
             desktopControls()
         }
 

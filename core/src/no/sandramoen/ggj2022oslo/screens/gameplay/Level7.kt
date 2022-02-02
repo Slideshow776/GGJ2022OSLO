@@ -4,7 +4,9 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import no.sandramoen.ggj2022oslo.actors.Gold
 import no.sandramoen.ggj2022oslo.actors.Overlay
 import no.sandramoen.ggj2022oslo.utils.BaseActor
@@ -15,6 +17,11 @@ class Level7(private var incomingScore: Int) : BaseLevelScreen("level7", incomin
 
     override fun initialize() {
         super.initialize()
+        scoreLabel.addListener(object : ActorGestureListener() {
+            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                levelAttemptOver()
+            }
+        })
 
         man.reversedHorizontal = true
         woman.reversedHorizontal = true
@@ -24,28 +31,13 @@ class Level7(private var incomingScore: Int) : BaseLevelScreen("level7", incomin
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if (keycode == Keys.R || keycode == Keys.BACK) {
-            changingScreen = true
-            GameUtils.stopAllMusic()
-            Overlay(0f, 0f, mainStage, comingIn = false)
-            if (!completedTheGame)
-                scoreLabel.setText("Score: $incomingScore")
-            val temp = BaseActor(0f, 0f, mainStage)
-            temp.addAction(
-                Actions.sequence(
-                    Actions.delay(.5f),
-                    Actions.run {
-                        if (lostTheGame) BaseGame.setActiveScreen(Level7(incomingScore))
-                        else {
-                            if (completedTheGame)
-                                BaseGame.setActiveScreen(Level8(score))
-                            else
-                                BaseGame.setActiveScreen(Level8(incomingScore))
-                        }
-                    }
-                ))
-        }
+        if (keycode == Keys.R) levelAttemptOver()
         return super.keyDown(keycode)
+    }
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        if (gameOver) levelAttemptOver()
+        return super.touchDown(screenX, screenY, pointer, button)
     }
 
     override fun cameraSetup() {
@@ -60,5 +52,27 @@ class Level7(private var incomingScore: Int) : BaseLevelScreen("level7", incomin
         camera.position.x = 540f // higher number = world to the left
         camera.position.y = 500f
         camera.update()
+    }
+
+    private fun levelAttemptOver() {
+        changingScreen = true
+        GameUtils.stopAllMusic()
+        Overlay(0f, 0f, mainStage, comingIn = false)
+        if (!completedTheGame)
+            scoreLabel.setText("Score: 0")
+        val temp = BaseActor(0f, 0f, mainStage)
+        temp.addAction(
+            Actions.sequence(
+                Actions.delay(.5f),
+                Actions.run {
+                    if (lostTheGame) BaseGame.setActiveScreen(Level7(incomingScore))
+                    else {
+                        if (completedTheGame)
+                            BaseGame.setActiveScreen(Level8(score))
+                        else
+                            BaseGame.setActiveScreen(Level8(0))
+                    }
+                }
+            ))
     }
 }

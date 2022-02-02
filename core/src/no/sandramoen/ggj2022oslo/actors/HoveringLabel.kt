@@ -1,5 +1,7 @@
 package no.sandramoen.ggj2022oslo.actors
 
+import com.badlogic.gdx.Application
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -26,7 +28,8 @@ class HoveringLabel(x: Float, y: Float, s: Stage, woman: Boolean = true) : BaseA
             11 -> text = "When will I see you again?"
         }
         val label = Label("$text", BaseGame.labelStyle)
-        label.setFontScale(.2f)
+        if (Gdx.app.type == Application.ApplicationType.Android) label.setFontScale(.125f)
+        else label.setFontScale(.2f)
         if (woman) label.color = Color.PINK
         else label.color = Color.CYAN
         setPosition(x - label.prefWidth / 2, y)

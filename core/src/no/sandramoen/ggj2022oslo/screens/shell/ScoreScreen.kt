@@ -77,7 +77,7 @@ class ScoreScreen(var score: Int) : BaseScreen() {
             uiTable.add(scoreLabel).padTop(padding).row()
 
         val restartLabel = Label("", BaseGame.labelStyle)
-        if (Gdx.app.type == Application.ApplicationType.Android) restartLabel.setText("press 'BACK' to restart")
+        if (Gdx.app.type == Application.ApplicationType.Android) restartLabel.setText("Touch to restart")
         else restartLabel.setText("press 'R' to restart")
         restartLabel.setFontScale(.5f)
         restartLabel.setAlignment(Align.center)

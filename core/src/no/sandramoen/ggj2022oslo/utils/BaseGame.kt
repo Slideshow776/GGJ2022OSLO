@@ -70,7 +70,7 @@ abstract class BaseGame() : Game(), AssetErrorListener {
     }
 
     override fun create() {
-        Gdx.input.setCatchKey(Input.Keys.BACK, true) // so that android doesn't exit game on back button
+        // Gdx.input.setCatchKey(Input.Keys.BACK, true) // so that android doesn't exit game on back button
         Gdx.input.inputProcessor = InputMultiplexer() // discrete input
 
         // global variables
