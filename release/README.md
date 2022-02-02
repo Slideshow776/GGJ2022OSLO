@@ -1,3 +1,5 @@
+_(Also available on _[_Google Play_](https://play.google.com/store/apps/details?id=no.sandramoen.ggj2022oslo)_)_
+
 # Installing the Game
 ## To play on Desktop:
 [Java](https://www.java.com/ES/download/) must be installed on your device.
