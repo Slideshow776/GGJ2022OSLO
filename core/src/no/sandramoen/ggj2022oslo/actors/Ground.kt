@@ -7,8 +7,8 @@ class Ground(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
     val tag = "Ground"
 
     init {
-        loadImage("ground")
-        setBoundaryPolygon(8)
-        isVisible = false
+        setSize(64f, 64f)
+        setBoundaryRectangle()
+        /*debug = true*/
     }
 }

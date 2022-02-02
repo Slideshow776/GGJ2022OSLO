@@ -66,7 +66,7 @@ class LazerBeam(x: Float, y: Float, s: Stage, val comingDown: Boolean = true) : 
                 Actions.scaleTo(1f, 0f, .1f),
                 Actions.run {
                     animationFinished = true
-                    if (time >= 2.2f)
+                    if (time >= 3f)
                         remove()
                 }
             ))

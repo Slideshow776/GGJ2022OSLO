@@ -31,7 +31,7 @@ class Level6 : BaseLevelScreen("level6") {
                 Actions.delay(.5f),
                 Actions.run {
                     if (lostTheGame) BaseGame.setActiveScreen(Level6())
-                    else BaseGame.setActiveScreen(Level1())
+                    else BaseGame.setActiveScreen(Level7())
                 }
             ))
         }

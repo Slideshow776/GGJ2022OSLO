@@ -14,7 +14,6 @@ class Level1: BaseLevelScreen("level1") {
 
     override fun keyDown(keycode: Int): Boolean {
         if (keycode == Keys.R || keycode == Keys.BACK) {
-            Gdx.app.error(tag, "new level")
             GameUtils.stopAllMusic()
             Overlay(0f, 0f, mainStage, comingIn = false)
             val temp = BaseActor(0f, 0f, mainStage)

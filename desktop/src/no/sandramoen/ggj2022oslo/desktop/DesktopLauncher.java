@@ -12,13 +12,6 @@ public class DesktopLauncher {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
-        // resolution
-        /*int LGg8ThinQHeight = 3120;
-        int LGg8ThinQWidth = 1440;
-        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        config.height = (int) (dimension.height / 1.1); // 10% less than height of screen
-        config.width = (int) (config.height / (LGg8ThinQHeight / LGg8ThinQWidth)); // width to mimic a phone*/
-
         config.height = 1040;
         config.width = 620;
 
@@ -28,8 +21,7 @@ public class DesktopLauncher {
         // miscellaneous
         config.title = "GGJ2022!    Binary Non-binary";
         config.resizable = true;
-        // config.addIcon("images/excluded/ic_launcher-desktop.png", Files.FileType.Internal);
-
+        config.addIcon("images/excluded/start.png", Files.FileType.Internal);
 
         new LwjglApplication(new GGJ2022OsloGame(), config);
     }

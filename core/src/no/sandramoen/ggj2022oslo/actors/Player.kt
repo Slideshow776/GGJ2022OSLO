@@ -31,6 +31,8 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     private var currentAnimation: Animation<TextureAtlas.AtlasRegion>
 
     init {
+        /*debug = true*/
+
         // animations
         var frameDuration = .25f
         if (woman) {
@@ -100,8 +102,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         setMaxSpeed(100f)
         setDeceleration(800f)
 
-        oWidth = width * 1.25f
-        oHeight = height * 1.25f
+        setCollisionAndAnimationSize()
     }
 
     override fun act(dt: Float) {
@@ -166,7 +167,6 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
 
     private fun androidControls() {
         if (reversedHorizontal && reversedVertical) {
-            Gdx.app.error(tag, "reversedHorizontal && reversedVertical")
             if (woman) accelerateAtAngle(joystickAngle)
             else accelerateAtAngle(joystickAngle + 180)
         } else if (reversedVertical) {
@@ -278,8 +278,14 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     private fun setTheAnimation(animation: Animation<TextureAtlas.AtlasRegion>) {
         setAnimation(animation)
         currentAnimation = animation
-        setSize(width / 1.0f, height / 1.0f)
-        setAnimationSize(oWidth, oHeight)
+        setCollisionAndAnimationSize()
         setBoundaryRectangle()
+    }
+
+    private fun setCollisionAndAnimationSize() {
+        oWidth = width * 1.25f
+        oHeight = height * 1.25f
+        setSize(width * .6f, height * .6f)
+        setAnimationSize(oWidth, oHeight)
     }
 }

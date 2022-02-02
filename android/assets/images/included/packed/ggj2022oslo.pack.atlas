@@ -98,51 +98,23 @@ filter: Nearest, Nearest
 repeat: none
 goldenCup
   rotate: false
-  xy: 483, 339
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-goldenCup-export
-  rotate: false
-  xy: 483, 305
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-goldenCup1
-  rotate: false
-  xy: 987, 455
+  xy: 331, 163
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 heart1
   rotate: false
-  xy: 987, 455
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-goldenCup2
-  rotate: false
-  xy: 331, 97
+  xy: 483, 339
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 heart2
   rotate: false
-  xy: 331, 97
+  xy: 987, 455
   size: 32, 32
   orig: 32, 32
-  offset: 0, 0
-  index: -1
-ground
-  rotate: false
-  xy: 921, 423
-  size: 64, 64
-  orig: 64, 64
   offset: 0, 0
   index: -1
 heartEffect0
@@ -203,28 +175,28 @@ heartEffect7
   index: -1
 heartbroken
   rotate: false
-  xy: 483, 271
+  xy: 331, 129
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 lazerBeam
   rotate: false
-  xy: 483, 237
+  xy: 483, 305
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 man
   rotate: false
-  xy: 987, 421
+  xy: 331, 95
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 man0
   rotate: false
-  xy: 365, 97
+  xy: 483, 271
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -238,7 +210,7 @@ overlay
   index: -1
 rock
   rotate: false
-  xy: 331, 131
+  xy: 921, 423
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -259,7 +231,7 @@ whitePixel_BIG
   index: -1
 woman
   rotate: false
-  xy: 543, 368
+  xy: 483, 237
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
