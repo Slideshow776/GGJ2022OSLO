@@ -3,15 +3,10 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.ggj2022oslo.actors.*
 import no.sandramoen.ggj2022oslo.actors.effects.StarEffect
@@ -21,7 +16,7 @@ import no.sandramoen.ggj2022oslo.utils.BaseScreen
 import no.sandramoen.ggj2022oslo.utils.GameUtils
 import kotlin.math.atan2
 
-open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
+open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : BaseScreen() {
     val tag = "LevelScreen"
 
     lateinit var woman: Player
@@ -30,14 +25,17 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
 
     private lateinit var winConditionLabel: Label
     private lateinit var restartLabel: Label
-    private lateinit var timeLabel: Label
+    lateinit var scoreLabel: Label
 
-    private var time: Int = 0
-    private var timeTilGameOver: Int = 300
+    var score: Int = 0
+    var maxLevelScore: Int = 300
+    private var accumulatedScore: Int = maxLevelScore + incomingScore
     private var timePassed: Float = 0f
     private var spawnBrokenHearts = true
     private var gameOver = false
     private lateinit var joystickPosition: Vector3
+    open var changingScreen = false
+    open var completedTheGame = false
 
     var lostTheGame = false
 
@@ -82,7 +80,8 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        joystickPosition = mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(),0f))
+        joystickPosition =
+            mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))
         woman.joystickActive = true
         man.joystickActive = true
 
@@ -96,12 +95,15 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     }
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        val worldCoordinates = mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(),0f))
+        val worldCoordinates =
+            mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))
 
-        var angle = Math.toDegrees(atan2(
-            worldCoordinates.y - joystickPosition.y,
-            worldCoordinates.x - joystickPosition.x
-        ).toDouble()).toFloat()
+        var angle = Math.toDegrees(
+            atan2(
+                worldCoordinates.y - joystickPosition.y,
+                worldCoordinates.x - joystickPosition.x
+            ).toDouble()
+        ).toFloat()
         if (angle < 0) angle += 360f
 
         woman.joystickAngle = angle
@@ -191,32 +193,28 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     }
 
     private fun checkWinConditionAndCountTime(dt: Float) {
-        if (woman.overlaps(man) && BaseActor.count(
-                mainStage,
-                Gold::class.java.canonicalName
-            ) == 0 && !winConditionLabel.isVisible
+        if (
+            woman.overlaps(man) &&
+            BaseActor.count(mainStage, Gold::class.java.canonicalName) == 0 &&
+            !winConditionLabel.isVisible
         ) {
-            // WIN!
+            completedTheGame = true
             winConditionLabel.isVisible = true
             restartLabel.isVisible = true
             LazerBeam(woman.x, woman.y, mainStage, comingDown = false)
             woman.remove()
             man.remove()
             gameOver = true
-        } else if (time >= 0 && !gameOver) {
-            countTime(dt)
-        } else if (time <= 0f) {
-            showGameOver()
-            woman.remove()
-            man.remove()
+        } else if (score >= 0 && !gameOver) {
+            calculatAndSetScore(dt)
         }
     }
 
-    private fun countTime(dt: Float) {
+    private fun calculatAndSetScore(dt: Float) {
         timePassed += dt
-        time = timeTilGameOver - timePassed.toInt()
-        if (time >= 0)
-            timeLabel.setText("Time: $time")
+        score = accumulatedScore - timePassed.toInt()
+        if (score >= 0 && !changingScreen)
+            scoreLabel.setText("Score: $score")
     }
 
     private fun handleLazerBeamComindDown() {
@@ -231,10 +229,10 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
     private fun uiSetup() {
         val padding = Gdx.graphics.height * .01f
 
-        timeLabel = Label("Time: 0", BaseGame.labelStyle)
-        timeLabel.setFontScale(.5f)
-        timeLabel.setAlignment(Align.center)
-        uiTable.add(timeLabel).expandY().top().padTop(padding).row()
+        scoreLabel = Label("Score: 0", BaseGame.labelStyle)
+        scoreLabel.setFontScale(.5f)
+        scoreLabel.setAlignment(Align.center)
+        uiTable.add(scoreLabel).expandY().top().padTop(padding).row()
 
         winConditionLabel = Label("A winner is you!", BaseGame.labelStyle)
         winConditionLabel.setFontScale(.7f)
@@ -248,6 +246,7 @@ open class BaseLevelScreen(var tiledLevel: String) : BaseScreen() {
             restartLabel = Label("press 'R' for next level!", BaseGame.labelStyle)
         restartLabel.setFontScale(.5f)
         restartLabel.color = Color.GRAY
+        GameUtils.pulseWidget(restartLabel)
         restartLabel.setAlignment(Align.center)
         restartLabel.isVisible = false
         uiTable.add(restartLabel).padTop(padding).expandY().top()

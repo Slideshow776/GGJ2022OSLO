@@ -5,12 +5,13 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import no.sandramoen.ggj2022oslo.actors.Gold
 import no.sandramoen.ggj2022oslo.actors.Overlay
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.GameUtils
 
-class Level8 : BaseLevelScreen("level8") {
+class Level8(private var incomingScore: Int) : BaseLevelScreen("level8", incomingScore) {
 
     override fun initialize() {
         super.initialize()
@@ -24,16 +25,25 @@ class Level8 : BaseLevelScreen("level8") {
 
     override fun keyDown(keycode: Int): Boolean {
         if (keycode == Keys.R || keycode == Keys.BACK) {
+            changingScreen = true
             GameUtils.stopAllMusic()
             Overlay(0f, 0f, mainStage, comingIn = false)
+            if (!completedTheGame)
+                scoreLabel.setText("Score: $incomingScore")
             val temp = BaseActor(0f, 0f, mainStage)
-            temp.addAction(Actions.sequence(
-                Actions.delay(.5f),
-                Actions.run {
-                    if (lostTheGame) BaseGame.setActiveScreen(Level8())
-                    else BaseGame.setActiveScreen(Level9())
-                }
-            ))
+            temp.addAction(
+                Actions.sequence(
+                    Actions.delay(.5f),
+                    Actions.run {
+                        if (lostTheGame) BaseGame.setActiveScreen(Level10(incomingScore))
+                        else {
+                            if (completedTheGame)
+                                BaseGame.setActiveScreen(Level9(score))
+                            else
+                                BaseGame.setActiveScreen(Level9(incomingScore))
+                        }
+                    }
+                ))
         }
         return super.keyDown(keycode)
     }

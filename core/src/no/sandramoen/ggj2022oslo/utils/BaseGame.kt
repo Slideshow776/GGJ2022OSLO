@@ -1,9 +1,6 @@
 package no.sandramoen.ggj2022oslo.utils
 
-import com.badlogic.gdx.Game
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
-import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.*
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
@@ -45,8 +42,6 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var labelStyle: LabelStyle? = null
         var textButtonStyle: TextButtonStyle? = null
         var textureAtlas: TextureAtlas? = null
-        var soundVolume = .75f
-        var musicVolume = .5f
         var deathLSound: Sound? = null
         var deathRSound: Sound? = null
         var trophyLSound: Sound? = null
@@ -62,6 +57,11 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var glowShader: String? = null
 
         // game state
+        var prefs: Preferences? = null
+        var loadPersonalParameters = false
+        var soundVolume = .75f
+        var musicVolume = .5f
+        var highScore: Int = 0
 
         fun setActiveScreen(s: BaseScreen) {
             s.initialize()
@@ -74,6 +74,12 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         Gdx.input.inputProcessor = InputMultiplexer() // discrete input
 
         // global variables
+        GameUtils.loadGameState()
+        if (!loadPersonalParameters) {
+            soundVolume = .75f
+            musicVolume = .25f
+            highScore = 0
+        }
         RATIO = Gdx.graphics.width.toFloat() / Gdx.graphics.height
 
         // asset manager

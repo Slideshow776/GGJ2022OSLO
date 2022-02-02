@@ -5,18 +5,20 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import no.sandramoen.ggj2022oslo.actors.Gold
 import no.sandramoen.ggj2022oslo.actors.Overlay
+import no.sandramoen.ggj2022oslo.screens.shell.ScoreScreen
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.GameUtils
 
-class Level10 : BaseLevelScreen("level10") {
+class Level10(private var incomingScore: Int) : BaseLevelScreen("level10", incomingScore) {
 
     override fun initialize() {
         super.initialize()
 
         man.reversedHorizontal = true
-        woman.reversedHorizontal = true    // true, false
+        woman.reversedHorizontal = true
 
         man.reversedVertical = true
         woman.reversedVertical = true
@@ -24,16 +26,25 @@ class Level10 : BaseLevelScreen("level10") {
 
     override fun keyDown(keycode: Int): Boolean {
         if (keycode == Keys.R || keycode == Keys.BACK) {
+            changingScreen = true
             GameUtils.stopAllMusic()
             Overlay(0f, 0f, mainStage, comingIn = false)
+            if (!completedTheGame)
+                scoreLabel.setText("Score: $incomingScore")
             val temp = BaseActor(0f, 0f, mainStage)
-            temp.addAction(Actions.sequence(
-                Actions.delay(.5f),
-                Actions.run {
-                    if (lostTheGame) BaseGame.setActiveScreen(Level10())
-                    else BaseGame.setActiveScreen(Level1())
-                }
-            ))
+            temp.addAction(
+                Actions.sequence(
+                    Actions.delay(.5f),
+                    Actions.run {
+                        if (lostTheGame) BaseGame.setActiveScreen(Level10(incomingScore))
+                        else {
+                            if (completedTheGame)
+                                BaseGame.setActiveScreen(ScoreScreen(score))
+                            else
+                                BaseGame.setActiveScreen(ScoreScreen(incomingScore))
+                        }
+                    }
+                ))
         }
         return super.keyDown(keycode)
     }

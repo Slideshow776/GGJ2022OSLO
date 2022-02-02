@@ -1,5 +1,6 @@
 package no.sandramoen.ggj2022oslo.utils
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -22,6 +23,29 @@ class GameUtils {
          */
         fun isTouchDownEvent(event: Event): Boolean { // Custom type checker
             return event is InputEvent && event.type == InputEvent.Type.touchDown
+        }
+
+
+        /**
+         * Save persistent game data.
+         */
+        fun saveGameState() {
+            BaseGame.prefs!!.putBoolean("loadPersonalParameters", true)
+            BaseGame.prefs!!.putFloat("musicVolume", BaseGame.musicVolume)
+            BaseGame.prefs!!.putFloat("soundVolume", BaseGame.soundVolume)
+            BaseGame.prefs!!.putInteger("highScore", BaseGame.highScore)
+            BaseGame.prefs!!.flush()
+        }
+
+        /**
+         * Load persistent game data.
+         */
+        fun loadGameState() {
+            BaseGame.prefs = Gdx.app.getPreferences("binaryNonBinaryGameState")
+            BaseGame.loadPersonalParameters = BaseGame.prefs!!.getBoolean("loadPersonalParameters")
+            BaseGame.musicVolume = BaseGame.prefs!!.getFloat("musicVolume")
+            BaseGame.soundVolume = BaseGame.prefs!!.getFloat("soundVolume")
+            BaseGame.highScore = BaseGame.prefs!!.getInteger("highScore")
         }
 
         fun stopAllMusic() {
@@ -86,7 +110,7 @@ class GameUtils {
         /**
          * Adds an action to pulse [actor] forever down to [lowestAlpha] with a total frequency of [duration].
          */
-        fun pulseWidget(actor: Actor, lowestAlpha: Float, duration: Float) {
+        fun pulseWidget(actor: Actor, lowestAlpha: Float = .7f, duration: Float = 1f) {
             actor.addAction(Actions.forever(Actions.sequence(
                     Actions.alpha(lowestAlpha, duration / 2),
                     Actions.alpha(1f, duration / 2)
