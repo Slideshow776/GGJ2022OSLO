@@ -57,6 +57,16 @@ class GameUtils {
         }
 
         /**
+         * Sets the game's music volume to [volume] &#91;0-1&#93;.
+         */
+        fun setMusicVolume(volume: Float) {
+            if (volume > 1f || volume < 0f)
+                Gdx.app.error(tag, "setMusicVolume()'s parameter needs to be within [0-1]. Volume is: $volume")
+            BaseGame.musicVolume = volume
+            BaseGame.levelMusic!!.volume = BaseGame.musicVolume
+        }
+
+        /**
          * Play, set [volume] and loop [music].
          */
         fun playAndLoopMusic(music: Music?, volume: Float = BaseGame.musicVolume) {

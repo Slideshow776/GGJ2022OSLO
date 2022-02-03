@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import kotlin.system.measureTimeMillis
@@ -43,6 +44,7 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
         var labelStyle: LabelStyle? = null
         var textButtonStyle: TextButtonStyle? = null
         var textureAtlas: TextureAtlas? = null
+        var skin: Skin? = null
         var deathLSound: Sound? = null
         var deathRSound: Sound? = null
         var trophyLSound: Sound? = null
@@ -50,6 +52,7 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
         var lazerBeamDownSound: Sound? = null
         var lazerBeamUpSound: Sound? = null
         var missYouSound: Sound? = null
+        var clickSound: Sound? = null
         var levelMusic: Music? = null
         var introMusic: Music? = null
         var stepsRMusic: Music? = null
@@ -73,7 +76,7 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
     }
 
     override fun create() {
-        // Gdx.input.setCatchKey(Input.Keys.BACK, true) // so that android doesn't exit game on back button
+        Gdx.input.setCatchKey(Input.Keys.BACK, true) // so that android doesn't exit game on back button
         Gdx.input.inputProcessor = InputMultiplexer() // discrete input
 
         // global variables
@@ -86,6 +89,11 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
             highScore = 0
         }
         RATIO = Gdx.graphics.width.toFloat() / Gdx.graphics.height
+        try { // Hack: any unfound assets will crash the game...
+            skin = Skin(Gdx.files.internal("skins/arcade/arcade.json"))
+        } catch (error: Throwable) {
+            Gdx.app.error(tag, "Error: Could not load skin: $error")
+        }
 
         // asset manager
         val time = measureTimeMillis {
@@ -107,6 +115,7 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
             assetManager.load("audio/sound/BNB_SFX_DEATH_L.wav", Sound::class.java)
             assetManager.load("audio/sound/BNB_SFX_DEATH_R.wav", Sound::class.java)
             assetManager.load("audio/sound/BNB_SFX_MISS_YOU.wav", Sound::class.java)
+            assetManager.load("audio/sound/click1.wav", Sound::class.java)
 
             // fonts
             val resolver = InternalFileHandleResolver()
@@ -146,6 +155,7 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
             trophyLSound = assetManager.get("audio/sound/BNB_SFX_TROPHY_L.wav", Sound::class.java)
             trophyRSound = assetManager.get("audio/sound/BNB_SFX_TROPHY_R.wav", Sound::class.java)
             missYouSound = assetManager.get("audio/sound/BNB_SFX_MISS_YOU.wav", Sound::class.java)
+            clickSound = assetManager.get("audio/sound/click1.wav", Sound::class.java)
 
             // text files
             defaultShader = assetManager.get("shaders/default.vs", Text::class.java).getString()

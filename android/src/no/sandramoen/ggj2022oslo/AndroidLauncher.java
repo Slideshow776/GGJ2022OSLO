@@ -140,4 +140,9 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
         gamesClient.setGravityForPopups(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         gamesClient.setViewForPopups(((AndroidGraphics) AndroidLauncher.this.getGraphics()).getView());
     }
+
+    @Override
+    public void showLeaderboard() {
+
+    }
 }

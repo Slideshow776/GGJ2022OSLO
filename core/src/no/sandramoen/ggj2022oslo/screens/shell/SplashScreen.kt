@@ -45,7 +45,7 @@ class SplashScreen : BaseScreen() {
                 Actions.fadeOut(totalDurationInSeconds / 4),
                 Actions.run {
                     // google play services
-                    if (Gdx.app.type == Application.ApplicationType.Android) // && BaseGame.isGPS) // TODO: implement this
+                    if (Gdx.app.type == Application.ApplicationType.Android && BaseGame.isGPS)
                         BaseGame.gps!!.signIn()
                 },
                 Actions.delay(totalDurationInSeconds / 4),
@@ -55,7 +55,7 @@ class SplashScreen : BaseScreen() {
         background.addAction(Actions.after(Actions.run {
             dispose()
             // GameUtils.stopAllMusic()
-            BaseGame.setActiveScreen(Level1())
+            BaseGame.setActiveScreen(MenuScreen())
         }))
     }
 

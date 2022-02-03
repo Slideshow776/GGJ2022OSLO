@@ -9,5 +9,6 @@ interface GooglePlayServices {
     fun getHighScore(): Int
     fun submitScore(score: Int)
     fun incrementAchievements(level: String)
+    fun showLeaderboard()
     fun showAchievements()
 }

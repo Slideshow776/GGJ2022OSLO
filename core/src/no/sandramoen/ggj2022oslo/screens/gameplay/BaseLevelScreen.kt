@@ -2,6 +2,7 @@ package no.sandramoen.ggj2022oslo.screens.gameplay
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.ggj2022oslo.actors.*
 import no.sandramoen.ggj2022oslo.actors.effects.StarEffect
+import no.sandramoen.ggj2022oslo.screens.shell.MenuScreen
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.BaseScreen
@@ -111,6 +113,14 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
         man.joystickAngle = angle
 
         return super.touchDragged(screenX, screenY, pointer)
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACKSPACE || keycode == Input.Keys.BACK) {
+            GameUtils.stopAllMusic()
+            BaseGame.setActiveScreen(MenuScreen())
+        }
+        return super.keyDown(keycode)
     }
 
     open fun cameraSetup() {}
@@ -268,11 +278,14 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
             Ground(props.get("x") as Float, props.get("y") as Float, mainStage)
         }
 
-        val startPoint =
-            tma.getTileList("start")[0] // TODO: Warning: will crash if there is no start point in map
-        val props = startPoint.properties
-        woman = Player(props.get("x") as Float, props.get("y") as Float, mainStage)
-        man = Player(props.get("x") as Float, props.get("y") as Float, mainStage, woman = false)
+        try {
+            val startPoint = tma.getTileList("start")[0] // TODO: Warning: will crash if there is no start point in map
+            val props = startPoint.properties
+            woman = Player(props.get("x") as Float, props.get("y") as Float, mainStage)
+            man = Player(props.get("x") as Float, props.get("y") as Float, mainStage, woman = false)
+        } catch (error: Error) {
+            Gdx.app.error(tag, "Tilemap could not find a start point! error: $error")
+        }
 
         for (obj in tma.getTileList("gold")) {
             val props = obj.properties
