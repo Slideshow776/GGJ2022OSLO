@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.games.AchievementsClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesClient;
+import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.PlayersClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +38,7 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount mGoogleSignInAccount;
     private AchievementsClient mAchievementClient;
+    private LeaderboardsClient mLeaderboardsClient;
     private PlayersClient mPlayersClient;
 
     @Override
@@ -65,6 +67,7 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         mAchievementClient = null;
+                        mLeaderboardsClient = null;
                         mPlayersClient = null;
                     }
                 });
@@ -92,43 +95,58 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
 
     @Override
     public void submitScore(int score) {
+        if (isSignedIn()) {
+            mLeaderboardsClient.submitScore("CgkI8omOue4OEAIQDA", score);
+        }
     }
 
     @Override
     public void rewardAchievement(int level) {
-        // popup view
-        GamesClient gamesClient = Games.getGamesClient(AndroidLauncher.this, mGoogleSignInAccount);
-        gamesClient.setGravityForPopups(Gravity.TOP);
-        gamesClient.setViewForPopups(((AndroidGraphics) AndroidLauncher.this.getGraphics()).getView());
+        if (isSignedIn()) {
+            // popup view
+            GamesClient gamesClient = Games.getGamesClient(AndroidLauncher.this, mGoogleSignInAccount);
+            gamesClient.setGravityForPopups(Gravity.TOP);
+            gamesClient.setViewForPopups(((AndroidGraphics) AndroidLauncher.this.getGraphics()).getView());
 
-        // achievements
-        if (level == 1)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQAg");
-        else if (level == 2)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQAw");
-        else if (level == 3)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQBA");
-        else if (level == 4)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQBQ");
-        else if (level == 5)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQBg");
-        else if (level == 6)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQBw");
-        else if (level == 7)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQCA");
-        else if (level == 8)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQCQ");
-        else if (level == 9)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQCg");
-        else if (level == 10)
-            mAchievementClient.unlock("CgkI8omOue4OEAIQCw");
+            // achievements
+            if (level == 1)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQAg");
+            else if (level == 2)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQAw");
+            else if (level == 3)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQBA");
+            else if (level == 4)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQBQ");
+            else if (level == 5)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQBg");
+            else if (level == 6)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQBw");
+            else if (level == 7)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQCA");
+            else if (level == 8)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQCQ");
+            else if (level == 9)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQCg");
+            else if (level == 10)
+                mAchievementClient.unlock("CgkI8omOue4OEAIQCw");
+        }
     }
 
     @Override
     public void showAchievements() {
-        mAchievementClient
-                .getAchievementsIntent()
-                .addOnSuccessListener(intent -> startActivityForResult(intent, RC_ACHIEVEMENT_UI));
+        if (isSignedIn()) {
+            mAchievementClient
+                    .getAchievementsIntent()
+                    .addOnSuccessListener(intent -> startActivityForResult(intent, RC_ACHIEVEMENT_UI));
+        }
+    }
+
+    @Override
+    public void showLeaderboard() {
+        if (isSignedIn()) {
+            mLeaderboardsClient.getLeaderboardIntent("CgkI8omOue4OEAIQDA")
+                    .addOnSuccessListener(intent -> startActivityForResult(intent, RC_LEADERBOARD_UI));
+        }
     }
 
     @Override
@@ -144,6 +162,7 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
                 // fetch clients
                 mPlayersClient = Games.getPlayersClient(this, mGoogleSignInAccount);
                 mAchievementClient = Games.getAchievementsClient(this, mGoogleSignInAccount);
+                mLeaderboardsClient = Games.getLeaderboardsClient(this, mGoogleSignInAccount);
             } else {
                 String message = result.getStatus().getStatusMessage();
                 System.out.println("AndroidLauncher.java: " + result.getStatus());
@@ -169,10 +188,4 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
         gamesClient.setGravityForPopups(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         gamesClient.setViewForPopups(((AndroidGraphics) AndroidLauncher.this.getGraphics()).getView());
     }
-
-    @Override
-    public void showLeaderboard() {
-
-    }
-
 }

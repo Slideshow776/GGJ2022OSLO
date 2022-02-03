@@ -45,7 +45,7 @@ class SplashScreen : BaseScreen() {
                 Actions.fadeOut(totalDurationInSeconds / 4),
                 Actions.run {
                     // google play services
-                    if (Gdx.app.type == Application.ApplicationType.Android && BaseGame.isGPS)
+                    if (Gdx.app.type == Application.ApplicationType.Android && BaseGame.isGPS && BaseGame.gps != null && BaseGame.gps!!.isSignedIn())
                         BaseGame.gps!!.signIn()
                 },
                 Actions.delay(totalDurationInSeconds / 4),

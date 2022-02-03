@@ -192,11 +192,13 @@ class OptionsScreen : BaseScreen() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 BaseGame.clickSound!!.play(BaseGame.soundVolume)
                 if (!BaseGame.isGPS) {
-                    BaseGame.gps!!.signIn()
+                    if (BaseGame.gps != null)
+                        BaseGame.gps!!.signIn()
                     attemptedToSignIn = true
                 } else {
                     BaseGame.isGPS = false
-                    BaseGame.gps!!.signOut()
+                    if (BaseGame.gps != null && BaseGame.gps!!.isSignedIn())
+                        BaseGame.gps!!.signOut()
                     achievementButton.touchable = Touchable.disabled
                     achievementButton.label.color = Color.DARK_GRAY
                     achievementImage.color = Color.DARK_GRAY

@@ -43,7 +43,7 @@ class ScoreScreen(var score: Int) : BaseScreen() {
             BaseActor(0f, 0f, mainStage).addAction(
                 Actions.sequence(
                     Actions.delay(.5f),
-                    Actions.run { BaseGame.setActiveScreen(Level1()) }
+                    Actions.run { BaseGame.setActiveScreen(MenuScreen()) }
                 ))
         }
         return super.keyDown(keycode)

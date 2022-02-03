@@ -16,6 +16,7 @@ import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.BaseScreen
 import no.sandramoen.ggj2022oslo.utils.GameUtils
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
@@ -30,8 +31,9 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     private lateinit var restartLabel: Label
     lateinit var scoreLabel: Label
 
-    var score: Int = 0
     var maxLevelScore: Int = 300
+    var score: Int = incomingScore + maxLevelScore
+    var incomingScore2 = incomingScore
     private var accumulatedScore: Int = maxLevelScore + incomingScore
     private var timePassed: Float = 0f
     private var spawnBrokenHearts = true
@@ -224,19 +226,19 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
             woman.remove()
             man.remove()
             gameOver = true
-            if (Gdx.app.type == Application.ApplicationType.Android) {
+            if (Gdx.app.type == Application.ApplicationType.Android && BaseGame.gps != null && BaseGame.gps!!.isSignedIn()) {
                 Gdx.app.error(tag, "Wanting to award achievement for level: ${tiledLevel.substring(5).toInt()}")
                 BaseGame.gps!!.rewardAchievement(tiledLevel.substring(5).toInt())
             }
-        } else if (score >= 0 && !gameOver) {
-            calculatAndSetScore(dt)
+        } else if (score >= incomingScore2 && !gameOver) {
+                calculatAndSetScore(dt)
         }
     }
 
     private fun calculatAndSetScore(dt: Float) {
         timePassed += dt
         score = accumulatedScore - timePassed.toInt()
-        if (score >= 0 && !changingScreen && !tutorial)
+        if (score >= incomingScore2 && !changingScreen && !tutorial)
             scoreLabel.setText("Score: $score")
     }
 
@@ -252,7 +254,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     private fun uiSetup() {
         val padding = Gdx.graphics.height * .01f
 
-        scoreLabel = Label("Score: 0", BaseGame.labelStyle)
+        scoreLabel = Label("Score: -1", BaseGame.labelStyle)
         scoreLabel.setFontScale(.5f)
         scoreLabel.setAlignment(Align.center)
         uiTable.add(scoreLabel).expandY().top().padTop(padding).width(Gdx.graphics.width * .5f).height(Gdx.graphics.height * .05f).row()

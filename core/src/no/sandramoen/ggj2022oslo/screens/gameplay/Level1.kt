@@ -45,7 +45,7 @@ class Level1() : BaseLevelScreen("level1", 0) {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if (keycode == Keys.R) levelAttemptOver()
+        if (keycode == Keys.R || keycode == Keys.ENTER) levelAttemptOver()
         return super.keyDown(keycode)
     }
 
@@ -81,8 +81,11 @@ class Level1() : BaseLevelScreen("level1", 0) {
                 Actions.run {
                     if (lostTheGame) BaseGame.setActiveScreen(Level1())
                     else {
-                        if (completedTheLevel)
+                        if (completedTheLevel) {
                             BaseGame.setActiveScreen(Level2(score))
+                            if (Gdx.app.type == Application.ApplicationType.Android && BaseGame.gps != null && BaseGame.gps!!.isSignedIn())
+                                BaseGame.gps!!.submitScore(score)
+                        }
                         else
                             BaseGame.setActiveScreen(Level2(0))
                     }
