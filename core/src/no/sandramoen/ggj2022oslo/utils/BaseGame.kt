@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import kotlin.system.measureTimeMillis
 
-abstract class BaseGame() : Game(), AssetErrorListener {
+abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), AssetErrorListener {
     private val tag = "BaseGame.kt"
 
     init { game = this }
@@ -39,6 +39,7 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var enableCustomShaders = true
 
         // game assets
+        var gps: GooglePlayServices? = null
         var labelStyle: LabelStyle? = null
         var textButtonStyle: TextButtonStyle? = null
         var textureAtlas: TextureAtlas? = null
@@ -55,12 +56,14 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         var stepsLMusic: Music? = null
         var defaultShader: String? = null
         var glowShader: String? = null
+        var shockwaveShader: String? = null
 
         // game state
         var prefs: Preferences? = null
         var loadPersonalParameters = false
         var soundVolume = .75f
         var musicVolume = .5f
+        var isGPS = false
         var highScore: Int = 0
 
         fun setActiveScreen(s: BaseScreen) {
@@ -74,6 +77,8 @@ abstract class BaseGame() : Game(), AssetErrorListener {
         Gdx.input.inputProcessor = InputMultiplexer() // discrete input
 
         // global variables
+        gps = this.googlePlayServices
+
         GameUtils.loadGameState()
         if (!loadPersonalParameters) {
             soundVolume = .75f
@@ -122,6 +127,7 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             // shaders
             assetManager.load(AssetDescriptor("shaders/default.vs", Text::class.java, TextLoader.TextParameter()))
             assetManager.load(AssetDescriptor("shaders/glow-pulse.fs", Text::class.java, TextLoader.TextParameter()))
+            assetManager.load(AssetDescriptor("shaders/shockwave.fs", Text::class.java, TextLoader.TextParameter()))
 
             assetManager.finishLoading()
 
@@ -144,6 +150,7 @@ abstract class BaseGame() : Game(), AssetErrorListener {
             // text files
             defaultShader = assetManager.get("shaders/default.vs", Text::class.java).getString()
             glowShader = assetManager.get("shaders/glow-pulse.fs", Text::class.java).getString()
+            shockwaveShader = assetManager.get("shaders/shockwave.fs", Text::class.java).getString()
 
             // skin
             // skin = assetManager.get("skins/arcade/arcade.json", Skin::class.java)
@@ -192,6 +199,8 @@ abstract class BaseGame() : Game(), AssetErrorListener {
 
     override fun dispose() {
         super.dispose()
+        GameUtils.saveGameState()
+        if (gps != null) gps!!.signOut()
         try { // TODO: uncomment this when development is done
             assetManager.dispose()
             fontGenerator.dispose()

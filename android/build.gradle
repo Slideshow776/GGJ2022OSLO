@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion "29.0.3"
-    compileSdkVersion 29
+    buildToolsVersion "30.0.3"
+    compileSdkVersion 30
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -18,7 +18,7 @@ android {
     }
     defaultConfig {
         applicationId "no.sandramoen.ggj2022oslo"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -87,6 +87,11 @@ task run(type: Exec) {
 
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'no.sandramoen.ggj2022oslo/no.sandramoen.ggj2022oslo.AndroidLauncher'
+}
+
+dependencies {
+    implementation "com.google.android.gms:play-services-games:21.0.0"
+    implementation "com.google.android.gms:play-services-auth:19.0.0"
 }
 
 eclipse.project.name = appName + "-android"

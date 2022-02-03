@@ -25,12 +25,12 @@ class GameUtils {
             return event is InputEvent && event.type == InputEvent.Type.touchDown
         }
 
-
         /**
          * Save persistent game data.
          */
         fun saveGameState() {
             BaseGame.prefs!!.putBoolean("loadPersonalParameters", true)
+            BaseGame.prefs!!.putBoolean("googlePlayServices", BaseGame.isGPS)
             BaseGame.prefs!!.putFloat("musicVolume", BaseGame.musicVolume)
             BaseGame.prefs!!.putFloat("soundVolume", BaseGame.soundVolume)
             BaseGame.prefs!!.putInteger("highScore", BaseGame.highScore)
@@ -43,6 +43,7 @@ class GameUtils {
         fun loadGameState() {
             BaseGame.prefs = Gdx.app.getPreferences("binaryNonBinaryGameState")
             BaseGame.loadPersonalParameters = BaseGame.prefs!!.getBoolean("loadPersonalParameters")
+            BaseGame.isGPS = BaseGame.prefs!!.getBoolean("googlePlayServices")
             BaseGame.musicVolume = BaseGame.prefs!!.getFloat("musicVolume")
             BaseGame.soundVolume = BaseGame.prefs!!.getFloat("soundVolume")
             BaseGame.highScore = BaseGame.prefs!!.getInteger("highScore")

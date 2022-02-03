@@ -23,6 +23,6 @@ public class DesktopLauncher {
         config.resizable = true;
         config.addIcon("images/excluded/start.png", Files.FileType.Internal);
 
-        new LwjglApplication(new GGJ2022OsloGame(), config);
+        new LwjglApplication(new GGJ2022OsloGame(null), config);
     }
 }
