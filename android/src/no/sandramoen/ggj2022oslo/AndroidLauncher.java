@@ -21,6 +21,7 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesClient;
 import com.google.android.gms.games.PlayersClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import no.sandramoen.ggj2022oslo.utils.GooglePlayServices;
@@ -94,12 +95,40 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
     }
 
     @Override
-    public void incrementAchievements(String level) {
+    public void rewardAchievement(int level) {
+        // popup view
+        GamesClient gamesClient = Games.getGamesClient(AndroidLauncher.this, mGoogleSignInAccount);
+        gamesClient.setGravityForPopups(Gravity.TOP);
+        gamesClient.setViewForPopups(((AndroidGraphics) AndroidLauncher.this.getGraphics()).getView());
 
+        // achievements
+        if (level == 1)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQAg");
+        else if (level == 2)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQAw");
+        else if (level == 3)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQBA");
+        else if (level == 4)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQBQ");
+        else if (level == 5)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQBg");
+        else if (level == 6)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQBw");
+        else if (level == 7)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQCA");
+        else if (level == 8)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQCQ");
+        else if (level == 9)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQCg");
+        else if (level == 10)
+            mAchievementClient.unlock("CgkI8omOue4OEAIQCw");
     }
 
     @Override
     public void showAchievements() {
+        mAchievementClient
+                .getAchievementsIntent()
+                .addOnSuccessListener(intent -> startActivityForResult(intent, RC_ACHIEVEMENT_UI));
     }
 
     @Override
@@ -145,4 +174,5 @@ public class AndroidLauncher extends AndroidApplication implements GooglePlaySer
     public void showLeaderboard() {
 
     }
+
 }

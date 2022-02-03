@@ -37,7 +37,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     var gameOver = false
     private lateinit var joystickPosition: Vector3
     open var changingScreen = false
-    open var completedTheGame = false
+    open var completedTheLevel = false
     open var tutorial = false
 
     var lostTheGame = false
@@ -209,13 +209,17 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
             BaseActor.count(mainStage, Gold::class.java.canonicalName) == 0 &&
             !winConditionLabel.isVisible
         ) {
-            completedTheGame = true
+            completedTheLevel = true
             winConditionLabel.isVisible = true
             restartLabel.isVisible = true
             LazerBeam(woman.x, woman.y, mainStage, comingDown = false)
             woman.remove()
             man.remove()
             gameOver = true
+            if (Gdx.app.type == Application.ApplicationType.Android) {
+                Gdx.app.error(tag, "Wanting to award achievement for level: ${tiledLevel.substring(5).toInt()}")
+                BaseGame.gps!!.rewardAchievement(tiledLevel.substring(5).toInt())
+            }
         } else if (score >= 0 && !gameOver) {
             calculatAndSetScore(dt)
         }

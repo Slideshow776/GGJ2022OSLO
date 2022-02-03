@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
-import no.sandramoen.ggj2022oslo.actors.Gold
 import no.sandramoen.ggj2022oslo.actors.Overlay
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
@@ -82,7 +81,7 @@ class Level1() : BaseLevelScreen("level1", 0) {
                 Actions.run {
                     if (lostTheGame) BaseGame.setActiveScreen(Level1())
                     else {
-                        if (completedTheGame)
+                        if (completedTheLevel)
                             BaseGame.setActiveScreen(Level2(score))
                         else
                             BaseGame.setActiveScreen(Level2(0))
