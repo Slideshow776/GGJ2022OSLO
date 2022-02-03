@@ -21,7 +21,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     var reversedVertical = false
 
     var joystickActive = false
-    var joystickAngle = 0f
+    var joystickAngle = -1f
 
     private var alive = true
     private var upAnimation: Animation<TextureAtlas.AtlasRegion>
@@ -110,12 +110,13 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         if (!inPlay) return
 
         if (Gdx.app.type == Application.ApplicationType.Android) {
-            if (joystickActive) androidControls()
+            if (joystickActive && joystickAngle >= 0) androidControls()
         } else {
-            if (joystickActive) androidControls()
+            if (joystickActive && joystickAngle >= 0) androidControls()
             desktopControls()
         }
 
+        // set animation and sound
         if (getSpeed() == 0f) {
             setAnimationPaused(true)
             if (woman) BaseGame.stepsRMusic!!.volume = 0f
@@ -146,6 +147,8 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
                 }
             }
         }
+
+        // miscellaneous
         applyPhysics(dt)
     }
 

@@ -17,6 +17,7 @@ import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.BaseScreen
 import no.sandramoen.ggj2022oslo.utils.GameUtils
 import kotlin.math.atan2
+import kotlin.math.sqrt
 
 open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : BaseScreen() {
     val tag = "LevelScreen"
@@ -36,6 +37,8 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     private var spawnBrokenHearts = true
     var gameOver = false
     private lateinit var joystickPosition: Vector3
+    private var joystickDistance = 0f
+    private var joystickSlack = 25f
     open var changingScreen = false
     open var completedTheLevel = false
     open var tutorial = false
@@ -83,11 +86,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        joystickPosition =
-            mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))
-        woman.joystickActive = true
-        man.joystickActive = true
-
+        joystickPosition = mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))
         return super.touchDown(screenX, screenY, pointer, button)
     }
 
@@ -98,8 +97,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     }
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        val worldCoordinates =
-            mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))
+        val worldCoordinates = mainStage.camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))
 
         var angle = Math.toDegrees(
             atan2(
@@ -109,8 +107,18 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
         ).toFloat()
         if (angle < 0) angle += 360f
 
+        joystickDistance = sqrt((worldCoordinates.x-joystickPosition.x)*(worldCoordinates.x-joystickPosition.x) + (worldCoordinates.y-joystickPosition.y)*(worldCoordinates.y-joystickPosition.y))
+
         woman.joystickAngle = angle
         man.joystickAngle = angle
+
+        if (joystickDistance >= joystickSlack) {
+            woman.joystickActive = true
+            man.joystickActive = true
+        } else {
+            woman.joystickActive = false
+            man.joystickActive = false
+        }
 
         return super.touchDragged(screenX, screenY, pointer)
     }
