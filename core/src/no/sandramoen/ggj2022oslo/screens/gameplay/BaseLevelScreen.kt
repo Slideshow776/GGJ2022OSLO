@@ -16,7 +16,6 @@ import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.BaseScreen
 import no.sandramoen.ggj2022oslo.utils.GameUtils
-import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
@@ -68,7 +67,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
         checkIfPlayerIsOnGround()
         checkWinConditionAndCountTime(dt)
 
-        handleLazerBeamComindDown()
+        handleLazerBeamGoingDown()
         checkAllGoldPickedUp()
     }
 
@@ -222,7 +221,7 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
             completedTheLevel = true
             winConditionLabel.isVisible = true
             restartLabel.isVisible = true
-            LazerBeam(woman.x, woman.y, mainStage, comingDown = false)
+            LazerBeam(woman.x, woman.y, mainStage, goingDown = false)
             woman.remove()
             man.remove()
             gameOver = true
@@ -242,8 +241,8 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
             scoreLabel.setText("Score: $score")
     }
 
-    private fun handleLazerBeamComindDown() {
-        if (lazerBeam != null && lazerBeam.animationFinished && lazerBeam.comingDown && !woman.inPlay) {
+    private fun handleLazerBeamGoingDown() {
+        if (lazerBeam != null && lazerBeam.animationFinished && lazerBeam.goingDown && !woman.inPlay) {
             woman.inPlay = true
             woman.isVisible = true
             man.isVisible = true

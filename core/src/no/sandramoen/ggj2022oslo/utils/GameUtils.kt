@@ -3,6 +3,7 @@ package no.sandramoen.ggj2022oslo.utils
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -11,23 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Widget
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
-/**
- * Utility class of often used custom methods.
- */
 class GameUtils {
     companion object {
         private val tag = "GameUtils.kt"
 
-        /**
-         * Detects if [event] is of type InputEvent.Type.touchDown
-         */
         fun isTouchDownEvent(event: Event): Boolean { // Custom type checker
             return event is InputEvent && event.type == InputEvent.Type.touchDown
         }
 
-        /**
-         * Save persistent game data.
-         */
         fun saveGameState() {
             BaseGame.prefs!!.putBoolean("loadPersonalParameters", true)
             BaseGame.prefs!!.putBoolean("googlePlayServices", BaseGame.isGPS)
@@ -37,9 +29,6 @@ class GameUtils {
             BaseGame.prefs!!.flush()
         }
 
-        /**
-         * Load persistent game data.
-         */
         fun loadGameState() {
             BaseGame.prefs = Gdx.app.getPreferences("binaryNonBinaryGameState")
             BaseGame.loadPersonalParameters = BaseGame.prefs!!.getBoolean("loadPersonalParameters")
@@ -56,9 +45,14 @@ class GameUtils {
             BaseGame.stepsLMusic!!.stop()
         }
 
-        /**
-         * Sets the game's music volume to [volume] &#91;0-1&#93;.
-         */
+        fun initShaderProgram(vertexShader: String?, fragmentShader: String?): ShaderProgram {
+            ShaderProgram.pedantic = false
+            val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
+            if (!shaderProgram!!.isCompiled)
+                Gdx.app.error(tag, "Couldn't compile shader: " + shaderProgram.log)
+            return shaderProgram
+        }
+
         fun setMusicVolume(volume: Float) {
             if (volume > 1f || volume < 0f)
                 Gdx.app.error(tag, "setMusicVolume()'s parameter needs to be within [0-1]. Volume is: $volume")
@@ -66,18 +60,12 @@ class GameUtils {
             BaseGame.levelMusic!!.volume = BaseGame.musicVolume
         }
 
-        /**
-         * Play, set [volume] and loop [music].
-         */
         fun playAndLoopMusic(music: Music?, volume: Float = BaseGame.musicVolume) {
             music!!.play()
             music!!.volume = volume
             music!!.isLooping = true
         }
 
-        /**
-         * Adds an [enter]/[exit] color effect on the [textButton].
-         */
         fun addTextButtonEnterExitEffect(textButton: TextButton, enterColor: Color = BaseGame.lightPink, exitColor: Color = Color.WHITE) {
             textButton.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
@@ -92,9 +80,6 @@ class GameUtils {
             })
         }
 
-        /**
-         * Adds an [enter]/[exit] color effect on the [widget].
-         */
         fun addWidgetEnterExitEffect(widget: Widget, enter: Color = BaseGame.lightPink, exit: Color = Color.WHITE) {
             widget.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
@@ -109,18 +94,12 @@ class GameUtils {
             })
         }
 
-        /**
-         * Returns the normalized value of [x] withing [min] and [max].
-         */
         fun normalizeValues(x: Float, min: Float, max: Float): Float {
             val dividend = x - min
             val divisor = max - min
             return dividend / divisor
         }
 
-        /**
-         * Adds an action to pulse [actor] forever down to [lowestAlpha] with a total frequency of [duration].
-         */
         fun pulseWidget(actor: Actor, lowestAlpha: Float = .7f, duration: Float = 1f) {
             actor.addAction(Actions.forever(Actions.sequence(
                     Actions.alpha(lowestAlpha, duration / 2),

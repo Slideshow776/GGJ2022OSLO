@@ -37,7 +37,7 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
         const val scale = 1.0f
         var RATIO = 0f
         val lightPink = Color(1f, .816f, .94f, 1f)
-        var enableCustomShaders = true
+        var enableCustomShaders = true // debugging purposes
 
         // game assets
         var gps: GooglePlayServices? = null

@@ -15,8 +15,6 @@ import no.sandramoen.ggj2022oslo.utils.GameUtils
 
 class ShockwaveBackground(texturePath: String, s: Stage) : BaseActor(0f, 0f, s) {
     private var tag: String = "ShockwaveBackground"
-    private var vertexShaderCode: String
-    private var fragmenterShaderCode: String
     var shaderProgram: ShaderProgram
 
     private var time = .0f
@@ -30,13 +28,7 @@ class ShockwaveBackground(texturePath: String, s: Stage) : BaseActor(0f, 0f, s) 
         else Gdx.app.error(tag, "texturePath is blank!")
 
         setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-
-        ShaderProgram.pedantic = false
-        vertexShaderCode = BaseGame.defaultShader.toString()
-        fragmenterShaderCode = BaseGame.shockwaveShader.toString()
-        shaderProgram = ShaderProgram(vertexShaderCode, fragmenterShaderCode)
-        if (!shaderProgram.isCompiled)
-            Gdx.app.error(tag, "Shader compile error: " + shaderProgram.log)
+        shaderProgram = GameUtils.initShaderProgram(BaseGame.defaultShader, BaseGame.shockwaveShader)
 
         addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -50,13 +42,7 @@ class ShockwaveBackground(texturePath: String, s: Stage) : BaseActor(0f, 0f, s) 
 
     override fun draw(batch: Batch, parentAlpha: Float) {
         if (BaseGame.enableCustomShaders && !disabled) {
-            try {
-                batch.shader = shaderProgram
-                shaderProgram.setUniformf("u_time", time)
-                shaderProgram.setUniformf("u_center", Vector2(shockWavePositionX, shockWavePositionY))
-                shaderProgram.setUniformf("u_shockParams", Vector3(10f, .8f, .1f))
-                super.draw(batch, parentAlpha)
-                batch.shader = null
+            try { drawWithShader(batch, parentAlpha)
             } catch (error: Throwable) {
                 super.draw(batch, parentAlpha)
             }
@@ -68,6 +54,15 @@ class ShockwaveBackground(texturePath: String, s: Stage) : BaseActor(0f, 0f, s) 
     override fun act(dt: Float) {
         super.act(dt)
         time += dt
+    }
+
+    private fun drawWithShader(batch: Batch, parentAlpha: Float) {
+        batch.shader = shaderProgram
+        shaderProgram.setUniformf("u_time", time)
+        shaderProgram.setUniformf("u_center", Vector2(shockWavePositionX, shockWavePositionY))
+        shaderProgram.setUniformf("u_shockParams", Vector3(10f, .8f, .1f))
+        super.draw(batch, parentAlpha)
+        batch.shader = null
     }
 
     private fun start(normalizedPosX: Float, normalizedPosY: Float) {
