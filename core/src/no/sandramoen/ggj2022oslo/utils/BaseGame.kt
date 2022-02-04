@@ -87,6 +87,8 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
             soundVolume = .75f
             musicVolume = .25f
             highScore = 0
+            if (Gdx.app.type == Application.ApplicationType.Android)
+                isGPS = true
         }
         RATIO = Gdx.graphics.width.toFloat() / Gdx.graphics.height
         try { // Hack: any unfound assets will crash the game...
