@@ -67,9 +67,24 @@ class MenuScreen : BaseScreen() {
         })
         GameUtils.addTextButtonEnterExitEffect(optionsButton)
 
+        val creditsButton = TextButton("Credits", BaseGame.textButtonStyle)
+        creditsButton.label.setFontScale(buttonScale)
+        creditsButton.addListener(object : ActorGestureListener() {
+            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                BaseGame.clickSound!!.play(BaseGame.soundVolume)
+                creditsButton.label.color = BaseGame.lightPink
+                creditsButton.addAction(Actions.sequence(
+                    Actions.delay(.5f),
+                    Actions.run { BaseGame.setActiveScreen(CreditsScreen()) }
+                ))
+            }
+        })
+        GameUtils.addTextButtonEnterExitEffect(creditsButton)
+
         val buttonsTable = Table()
-        buttonsTable.add(startButton).row()
-        buttonsTable.add(optionsButton).row()
+        buttonsTable.add(startButton).padBottom(Gdx.graphics.height * .03f).row()
+        buttonsTable.add(optionsButton).padBottom(Gdx.graphics.height * .03f).row()
+        buttonsTable.add(creditsButton).row()
 
         // gui setup
         val padding = Gdx.graphics.height * .01f

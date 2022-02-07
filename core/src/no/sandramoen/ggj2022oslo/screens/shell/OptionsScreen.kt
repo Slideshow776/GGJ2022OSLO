@@ -145,7 +145,7 @@ class OptionsScreen : BaseScreen() {
         }
 
         val achievementTable = Table()
-        achievementTable.add(achievementButton)
+        achievementTable.add(achievementButton).padRight(Gdx.graphics.width * .025f)
         achievementTable.add(achievementImage).width(Gdx.graphics.width * .06f).height(Gdx.graphics.height * .045f)
 
         // leader board ----------------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ class OptionsScreen : BaseScreen() {
         }
 
         val leaderBoardTable = Table()
-        leaderBoardTable.add(leaderboardsButton)
+        leaderBoardTable.add(leaderboardsButton).padRight(Gdx.graphics.width * .025f)
         leaderBoardTable.add(leaderboardsImage).width(Gdx.graphics.width * .06f).height(Gdx.graphics.height * .045f)
 
         // google play services --------------------------------------------------------------------------------------

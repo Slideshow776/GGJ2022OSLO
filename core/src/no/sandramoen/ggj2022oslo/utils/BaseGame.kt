@@ -197,12 +197,6 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
             labelStyle!!.font = customFont
 
             textButtonStyle = TextButtonStyle()
-            val buttonTexUp = textureAtlas!!.findRegion("blankPixel") // button
-            // val buttonTexDown = textureAtlas!!.findRegion("button-pressed")
-            val buttonPatchUp = NinePatch(buttonTexUp, 44, 24, 24, 24)
-            // val buttonPatchDown = NinePatch(buttonTexDown, 44, 24, 24, 24)
-            textButtonStyle!!.up = NinePatchDrawable(buttonPatchUp)
-            // textButtonStyle!!.down = NinePatchDrawable(buttonPatchDown)
             textButtonStyle!!.font = buttonCustomFont
             textButtonStyle!!.fontColor = Color.WHITE
         }
