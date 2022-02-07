@@ -10,3 +10,11 @@ Available for free on [Google Play](https://play.google.com/store/apps/details?i
 You can also [play it](https://github.com/Slideshow776/GGJ2022OSLO/tree/master/release) for free on Desktop and Android!
 
 ![gameplay](https://user-images.githubusercontent.com/4059636/151694093-e5b9adce-20ef-4661-b344-227d414fe5b3.gif)
+
+## Credits: 
+* Game designer and coder: Sandra Moen
+* Assisting coder: ITR
+* Audio by: Jonathan Hildebrand
+* Graphics by: Jennipher Karlsson & Johannes Eliassen
+
+_All team members participated in GGJ2022 Oslo site._
