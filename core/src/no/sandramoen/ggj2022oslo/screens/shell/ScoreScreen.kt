@@ -36,17 +36,26 @@ class ScoreScreen(var score: Int) : BaseScreen() {
         return false
     }
 
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        goToMenuScreen()
+        return super.touchDown(screenX, screenY, pointer, button)
+    }
+
     override fun keyDown(keycode: Int): Boolean {
         if (keycode == Input.Keys.R || keycode == Input.Keys.BACK) {
-            GameUtils.stopAllMusic()
-            Overlay(0f, 0f, mainStage, comingIn = false)
-            BaseActor(0f, 0f, mainStage).addAction(
-                Actions.sequence(
-                    Actions.delay(.5f),
-                    Actions.run { BaseGame.setActiveScreen(MenuScreen()) }
-                ))
+            goToMenuScreen()
         }
         return super.keyDown(keycode)
+    }
+
+    private fun goToMenuScreen() {
+        GameUtils.stopAllMusic()
+        Overlay(0f, 0f, mainStage, comingIn = false)
+        BaseActor(0f, 0f, mainStage).addAction(
+            Actions.sequence(
+                Actions.delay(.5f),
+                Actions.run { BaseGame.setActiveScreen(MenuScreen()) }
+            ))
     }
 
     private fun cameraSetup() {
