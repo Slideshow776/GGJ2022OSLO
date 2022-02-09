@@ -1,0 +1,20 @@
+_(Also available on _[_Google Play_](https://play.google.com/store/apps/details?id=no.sandramoen.ggj2022oslo)_)_
+
+# Installing the Game
+## To play on Desktop:
+[Java](https://www.java.com/en) must be installed on your device.
+1. Click and download `Binary Non-Binary.jar`.
+2. Double click to run.
+   * Alternatively:
+      1. Open a terminal (cmd).
+      2. Navigate to the file `$cd [path]`.
+      3. Run `$java -jar "Binary Non-Binary.jar"`.
+
+_Game controls: WASD, Arrow Keys or click and drag to create an invisible joystick._
+      
+## To play on Andoid:
+1. Click and download `Binary Non-Binary.apk`.
+2. Consent to any warnings about installing the app.
+3. Install and play.
+
+_Game controls: Touch and drag to create an invisible joystick._
