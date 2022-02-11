@@ -27,7 +27,7 @@ class ShockwaveBackground(texturePath: String, s: Stage) : BaseActor(0f, 0f, s) 
         if (texturePath.isNotBlank()) loadTexture(texturePath)
         else Gdx.app.error(tag, "texturePath is blank!")
 
-        setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
         shaderProgram = GameUtils.initShaderProgram(BaseGame.defaultShader, BaseGame.shockwaveShader)
 
         addListener { e: Event ->

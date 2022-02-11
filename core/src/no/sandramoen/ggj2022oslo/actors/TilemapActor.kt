@@ -1,6 +1,5 @@
 package no.sandramoen.ggj2022oslo.actors
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.maps.MapLayer
@@ -9,57 +8,48 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
-import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
-import no.sandramoen.ggj2022oslo.utils.BaseActor
 import java.util.ArrayList
 
 class TilemapActor(filename: String, theStage: Stage): Actor() {
     companion object {
-        // window dimensions
-        val windowWidth = Gdx.graphics.width.toFloat()
-        val windowHeight = Gdx.graphics.height.toFloat()
+        var mapWidth = -1f
+        var mapHeight = -1f
     }
 
     private var tiledMap: TiledMap
     private var tiledCamera: OrthographicCamera
-    private var tiledMapRenderer: OrthoCachedTiledMapRenderer
+    private var tiledMapRenderer: OrthogonalTiledMapRenderer
 
     init {
-        // set up tile map, renderer, and camera
         tiledMap = TmxMapLoader().load(filename)
 
         val tileWidth = tiledMap.properties.get("tilewidth") as Int
         val tileHeight = tiledMap.properties.get("tileheight") as Int
         val numTilesHorizontal = tiledMap.properties.get("width") as Int
         val numTilesVertical = tiledMap.properties.get("height") as Int
-        val mapWidth = tileWidth * numTilesHorizontal
-        val mapHeight = tileHeight * numTilesVertical
+        mapWidth = (tileWidth * numTilesHorizontal).toFloat()
+        mapHeight = (tileHeight * numTilesVertical).toFloat()
 
-        BaseActor.setWorldBounds(mapWidth.toFloat(), mapHeight.toFloat())
-
-        tiledMapRenderer = OrthoCachedTiledMapRenderer(tiledMap)
-        tiledMapRenderer.setBlending(true)
+        tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, 1/32f)
 
         tiledCamera = OrthographicCamera()
-        tiledCamera.setToOrtho(false, windowWidth, windowHeight)
-        tiledCamera.update()
+        tiledCamera.setToOrtho(false, 32f, 32f)
+        // tiledCamera.position.x += 2f
 
         theStage.addActor(this)
     }
 
-    override fun act(dt: Float) {
-        super.act(dt)
-    }
-
     override fun draw(batch: Batch?, parentAlpha: Float) {
-        /*super.draw(batch, parentAlpha)*/
+        super.draw(batch, parentAlpha)
 
         // adjust tilemap camera to stay in sync with main camera
         val mainCamera = stage.camera as OrthographicCamera
-        tiledCamera.position.x = mainCamera.position.x
-        tiledCamera.position.y = mainCamera.position.y
+        // tiledCamera.position.set(tiledCamera.viewportWidth / 2, tiledCamera.viewportHeight / 2, 0f)
+        // tiledCamera.position.x = mainCamera.position.x * .325f
+        // tiledCamera.position.y = mainCamera.position.y
         tiledCamera.zoom = mainCamera.zoom
         tiledCamera.update()
         tiledMapRenderer.setView(tiledCamera)

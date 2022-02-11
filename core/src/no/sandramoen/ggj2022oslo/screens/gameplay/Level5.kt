@@ -43,13 +43,7 @@ class Level5(private var incomingScore: Int) : BaseLevelScreen("level5", incomin
         super.cameraSetup()
 
         val camera = mainStage.camera as OrthographicCamera
-        if (Gdx.app.type == Application.ApplicationType.Android) {
-            camera.zoom = .47f // higher number = zoom out
-        } else {
-            camera.zoom = .81f // higher number = zoom out
-        }
-        camera.position.x = 410f // higher number = world to the left
-        camera.position.y = 500f
+        camera.zoom = .6f // higher number = zoom out
         camera.update()
     }
 
@@ -57,8 +51,6 @@ class Level5(private var incomingScore: Int) : BaseLevelScreen("level5", incomin
         changingScreen = true
         GameUtils.stopAllMusic()
         Overlay(0f, 0f, mainStage, comingIn = false)
-        /*if (!completedTheGame)
-            scoreLabel.setText("Score: $incomingScore")*/
         val temp = BaseActor(0f, 0f, mainStage)
         temp.addAction(
             Actions.sequence(

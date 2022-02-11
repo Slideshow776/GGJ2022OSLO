@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.ggj2022oslo.actors.Background
 import no.sandramoen.ggj2022oslo.actors.Overlay
-import no.sandramoen.ggj2022oslo.screens.gameplay.Level1
 import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.BaseScreen

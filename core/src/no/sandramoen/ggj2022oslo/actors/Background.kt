@@ -3,6 +3,7 @@ package no.sandramoen.ggj2022oslo.actors
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import no.sandramoen.ggj2022oslo.utils.BaseActor
+import no.sandramoen.ggj2022oslo.utils.BaseGame
 
 class Background(s: Stage) : BaseActor(0f, 0f, s) {
     private lateinit var image00: BaseActor
@@ -53,61 +54,65 @@ class Background(s: Stage) : BaseActor(0f, 0f, s) {
     private fun layer0Setup(s: Stage) {
         image00 = BaseActor(0f, 0f, s)
         image00.loadImage("space0")
-        image00.scaleY = 1.1f
+        image00.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
 
         image01 = BaseActor(image00.width, 0f, s)
         image01.loadImage("space0")
-        image01.scaleX = 1.1f // overlapping hack
-        image01.scaleY = 1.1f
+        image01.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
     }
 
     private fun layer1Setup(s: Stage) {
         image10 = BaseActor(0f, 0f, s)
         image10.loadImage("space1")
+        image10.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
 
         image11 = BaseActor(image10.width, 0f, s)
         image11.loadImage("space1")
-        image11.scaleX = 1.1f // overlapping hack
+        image11.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
         image11.x = Gdx.graphics.width.toFloat()
     }
 
     private fun layer2Setup(s: Stage) {
         image20 = BaseActor(0f, 0f, s)
         image20.loadImage("space2")
+        image20.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
 
         image21 = BaseActor(image20.width, 0f, s)
         image21.loadImage("space2")
-        image21.scaleX = 1.1f // overlapping hack
+        image21.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
         image21.x = Gdx.graphics.width.toFloat()
     }
 
     private fun layer3Setup(s: Stage) {
         image30 = BaseActor(0f, 0f, s)
         image30.loadImage("space3")
+        image30.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
 
         image31 = BaseActor(image30.width, 0f, s)
         image31.loadImage("space3")
-        image31.scaleX = 1.1f // overlapping hack
+        image31.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
         image31.x = Gdx.graphics.width.toFloat()
     }
 
     private fun layer4Setup(s: Stage) {
         image40 = BaseActor(0f, 0f, s)
         image40.loadImage("space4")
+        image40.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
 
         image41 = BaseActor(image20.width, 0f, s)
         image41.loadImage("space4")
-        image41.scaleX = 1.1f // overlapping hack
+        image41.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
         image41.x = Gdx.graphics.width.toFloat()
     }
 
     private fun layer5Setup(s: Stage) {
         image50 = BaseActor(0f, 0f, s)
         image50.loadImage("space5")
+        image50.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
 
         image51 = BaseActor(image20.width, 0f, s)
         image51.loadImage("space5")
-        image51.scaleX = 1.1f // overlapping hack
+        image51.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
         image51.x = Gdx.graphics.width.toFloat()
     }
 

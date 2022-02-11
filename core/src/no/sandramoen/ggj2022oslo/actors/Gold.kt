@@ -16,7 +16,10 @@ class Gold(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
     init {
         loadImage("goldenCup")
+        setPixelSizeToRelativeSize(32)
+        setBoundaryRectangle()
         shaderProgram = GameUtils.initShaderProgram(BaseGame.defaultShader, BaseGame.glowShader)
+        /*debug = true*/
     }
 
     override fun act(dt: Float) {

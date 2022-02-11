@@ -1,27 +1,23 @@
 package no.sandramoen.ggj2022oslo.actors
 
-import com.badlogic.gdx.Application
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import no.sandramoen.ggj2022oslo.utils.BaseActor
+import no.sandramoen.ggj2022oslo.utils.BaseGame
 
 class Overlay(x: Float, y: Float, s: Stage, comingIn: Boolean = true) : BaseActor(x, y, s) {
     val tag = "Overlay"
 
     init {
         loadImage("overlay")
-        if (Gdx.app.type == Application.ApplicationType.Android)
-            setSize(Gdx.graphics.width.toFloat() * 2f, Gdx.graphics.height.toFloat() * .5f)
-        else
-            setSize(Gdx.graphics.width.toFloat() * 2f, Gdx.graphics.height.toFloat() * .9f)
+        setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT)
 
         if (comingIn) {
-            setPosition(x, y + 70)
-            addAction(Actions.moveBy(-Gdx.graphics.width.toFloat() * 2, 0f, .25f))
-        } else { // coming out
-            setPosition(Gdx.graphics.width.toFloat(), y + 50)
-            addAction(Actions.moveBy(-Gdx.graphics.width.toFloat() * 2, 0f, .9f))
+            setPosition(0f, y)
+            addAction(Actions.moveBy(-BaseGame.WORLD_WIDTH * 2, 0f, .9f))
+        } else {
+            setPosition(BaseGame.WORLD_WIDTH, y)
+            addAction(Actions.moveBy(-BaseGame.WORLD_WIDTH * 2, 0f, .9f))
         }
     }
 }

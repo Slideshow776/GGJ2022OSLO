@@ -5,18 +5,21 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.input.GestureDetector
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import no.sandramoen.ggj2022oslo.screens.gameplay.Level1
+import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.StretchViewport
+import no.sandramoen.ggj2022oslo.actors.TilemapActor
 
 abstract class BaseScreen : Screen, InputProcessor {
     protected var mainStage: Stage
     protected var uiStage: Stage
     protected var uiTable: Table
+    protected var camera: OrthographicCamera
 
     init {
         mainStage = Stage()
@@ -26,29 +29,30 @@ abstract class BaseScreen : Screen, InputProcessor {
         uiTable.setFillParent(true)
         uiStage.addActor(uiTable)
 
-        // initialize()
+        camera = mainStage.camera as OrthographicCamera
+
+        mainStage.viewport = StretchViewport(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT, camera)
+        mainStage.viewport.apply()
+
+        camera.position.set(0f, 0f, 0f)
     }
 
     abstract fun initialize()
     abstract fun update(dt: Float)
 
-    // Gameloop:
-    // (1) process input (discrete handled by listener; continuous in update)
-    // (2) update game logic
-    // (3) render the graphics
     override fun render(dt: Float) {
-        // act methods
         uiStage.act(dt)
         mainStage.act(dt)
 
-        // defined by user
         update(dt)
 
-        // clear the screen
+        camera.update()
+
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        // draw the graphics
+        // this.mainStage.batch.projectionMatrix = camera.combined
+
         mainStage.draw()
         uiStage.draw()
     }
@@ -67,12 +71,15 @@ abstract class BaseScreen : Screen, InputProcessor {
         im.removeProcessor(mainStage)
     }
 
+    override fun resize(width: Int, height: Int) {
+        mainStage.viewport.update(width, height)
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f)
+    }
+
     override fun pause() {}
     override fun resume() {}
-    override fun resize(width: Int, height: Int) {}
     override fun dispose() {}
 
-    // methods required by InputProcessor interface
     override fun keyDown(keycode: Int): Boolean { return false }
     override fun keyUp(keycode: Int): Boolean { return false }
     override fun keyTyped(character: Char): Boolean { return false }
@@ -80,9 +87,5 @@ abstract class BaseScreen : Screen, InputProcessor {
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean { return false }
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean { return false }
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean { return false }
-
-    // Custom type checker
-    fun isTouchDownEvent(e: Event): Boolean {
-        return e is InputEvent && e.type == Type.touchDown
-    }
+    fun isTouchDownEvent(e: Event): Boolean { return e is InputEvent && e.type == Type.touchDown }
 }

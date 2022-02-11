@@ -23,86 +23,28 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     var joystickActive = false
     var joystickAngle = -1f
 
-    private var alive = true
-    private var upAnimation: Animation<TextureAtlas.AtlasRegion>
-    private var downAnimation: Animation<TextureAtlas.AtlasRegion>
-    private var leftAnimation: Animation<TextureAtlas.AtlasRegion>
-    private var rightAnimation: Animation<TextureAtlas.AtlasRegion>
-    private var currentAnimation: Animation<TextureAtlas.AtlasRegion>
+    var alive = true
+    private lateinit var upAnimation: Animation<TextureAtlas.AtlasRegion>
+    private lateinit var downAnimation: Animation<TextureAtlas.AtlasRegion>
+    private lateinit var leftAnimation: Animation<TextureAtlas.AtlasRegion>
+    private lateinit var rightAnimation: Animation<TextureAtlas.AtlasRegion>
+    private lateinit var currentAnimation: Animation<TextureAtlas.AtlasRegion>
 
     init {
-        /*debug = true*/
+        animationSetup()
 
-        // animations
-        var frameDuration = .25f
-        if (woman) {
-            var animationImages: Array<TextureAtlas.AtlasRegion> = Array()
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman4"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman5"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman6"))
-            upAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman1"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman2"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman3"))
-            downAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman10"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman11"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman12"))
-            leftAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman7"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman8"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman9"))
-            rightAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-        } else {
-            var animationImages: Array<TextureAtlas.AtlasRegion> = Array()
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man4"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man5"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man6"))
-            upAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man1"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man2"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man3"))
-            downAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man10"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man11"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man12"))
-            leftAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man7"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man8"))
-            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man9"))
-            rightAnimation =
-                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
-            animationImages.clear()
-        }
-
-        currentAnimation = upAnimation
-        setAnimation(upAnimation)
-
-        setAcceleration(800f)
-        setMaxSpeed(100f)
-        setDeceleration(800f)
+        setAcceleration(100f)
+        setMaxSpeed(10f)
+        setDeceleration(100f)
 
         setCollisionAndAnimationSize()
+
+        setPixelSizeToRelativeSize(32)
+        oWidth = width
+        oHeight = height
+        setCollisionAndAnimationSize()
+
+        /*debug = true*/
     }
 
     override fun act(dt: Float) {
@@ -168,6 +110,72 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
         }
     }
 
+    private fun animationSetup() {
+        var frameDuration = .25f
+        if (woman) {
+            var animationImages: Array<TextureAtlas.AtlasRegion> = Array()
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman4"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman5"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman6"))
+            upAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman1"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman2"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman3"))
+            downAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman10"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman11"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman12"))
+            leftAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman7"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman8"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("woman/woman9"))
+            rightAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+        } else {
+            var animationImages: Array<TextureAtlas.AtlasRegion> = Array()
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man4"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man5"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man6"))
+            upAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man1"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man2"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man3"))
+            downAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man10"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man11"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man12"))
+            leftAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man7"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man8"))
+            animationImages.add(BaseGame.textureAtlas!!.findRegion("man/man9"))
+            rightAnimation =
+                Animation(frameDuration, animationImages, Animation.PlayMode.LOOP_PINGPONG)
+            animationImages.clear()
+        }
+
+        currentAnimation = upAnimation
+        setAnimation(upAnimation)
+    }
+
     private fun androidControls() {
         if (reversedHorizontal && reversedVertical) {
             if (woman) accelerateAtAngle(joystickAngle)
@@ -212,7 +220,6 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
 
     private fun desktopControls() {
         if (reversedHorizontal && reversedVertical) {
-            // println("$tag: reversedHorizontal && reversedVertical")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 if (woman) accelerateAtAngle(90f)
                 else accelerateAtAngle(270f)
@@ -230,7 +237,6 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
                 else accelerateAtAngle(0f)
             }
         } else if (reversedVertical) {
-            // println("$tag: reversedVertical")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 if (woman) accelerateAtAngle(90f)
                 else accelerateAtAngle(270f)
@@ -246,7 +252,6 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
                 accelerateAtAngle(180f)
             }
         } else if (reversedHorizontal) {
-            // println("$tag: reversedHorizontal")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 accelerateAtAngle(90f)
             }
@@ -262,7 +267,6 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
                 else accelerateAtAngle(0f)
             }
         } else {
-            // println("$tag: no reverse")
             if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W)) {
                 accelerateAtAngle(90f)
             }
@@ -286,9 +290,7 @@ class Player(x: Float, y: Float, s: Stage, val woman: Boolean = true) : BaseActo
     }
 
     private fun setCollisionAndAnimationSize() {
-        oWidth = width * 1.25f
-        oHeight = height * 1.25f
-        setSize(width * .6f, height * .6f)
-        setAnimationSize(oWidth, oHeight)
+        setPixelSizeToRelativeSize(16)
+        setAnimationSize(oWidth * 1.5f, oHeight * 1.5f)
     }
 }

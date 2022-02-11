@@ -10,7 +10,6 @@ import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture.TextureFilter
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
@@ -19,7 +18,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import kotlin.system.measureTimeMillis
 
 abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), AssetErrorListener {
@@ -33,7 +31,7 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
         lateinit var assetManager: AssetManager
         lateinit var fontGenerator: FreeTypeFontGenerator
         const val WORLD_WIDTH = 100f
-        const val WORLD_HEIGHT = 100f
+        const val WORLD_HEIGHT = WORLD_WIDTH
         const val scale = 1.0f
         var RATIO = 0f
         val lightPink = Color(1f, .816f, .94f, 1f)
@@ -69,9 +67,9 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
         var isGPS = false
         var highScore: Int = 0
 
-        fun setActiveScreen(s: BaseScreen) {
-            s.initialize()
-            game?.setScreen(s)
+        fun setActiveScreen(screen: BaseScreen) {
+            screen.initialize()
+            game?.setScreen(screen)
         }
     }
 
@@ -124,10 +122,6 @@ abstract class BaseGame(var googlePlayServices: GooglePlayServices?) : Game(), A
             assetManager.setLoader(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))
             assetManager.setLoader(BitmapFont::class.java, ".ttf", FreetypeFontLoader(resolver))
             assetManager.setLoader(Text::class.java, TextLoader(InternalFileHandleResolver()))
-
-            // shaders
-            // assetManager.load(AssetDescriptor("shaders/default.vs", Text::class.java, TextLoader.TextParameter()))
-            // assetManager.load(AssetDescriptor("shaders/vignette.fs", Text::class.java, TextLoader.TextParameter() ))
 
             // skins
             // assetManager.load("skins/arcade/arcade.json", Skin::class.java)

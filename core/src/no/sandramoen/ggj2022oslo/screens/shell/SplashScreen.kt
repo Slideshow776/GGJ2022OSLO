@@ -36,7 +36,7 @@ class SplashScreen : BaseScreen() {
         background.loadImage("whitePixel_BIG")
         background.color = Color.BLACK
         background.touchable = Touchable.childrenOnly
-        background.setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        background.setSize(BaseGame.WORLD_WIDTH+2, BaseGame.WORLD_HEIGHT+2)
         background.setPosition(0f, 0f)
         var totalDurationInSeconds = 6f
         background.addAction(

@@ -12,7 +12,7 @@ import no.sandramoen.ggj2022oslo.utils.BaseActor
 import no.sandramoen.ggj2022oslo.utils.BaseGame
 import no.sandramoen.ggj2022oslo.utils.GameUtils
 
-class Level1() : BaseLevelScreen("level1", 0) {
+class Level1 : BaseLevelScreen("level1", 0) {
 
     override fun initialize() {
         super.initialize()
@@ -34,11 +34,13 @@ class Level1() : BaseLevelScreen("level1", 0) {
                 Actions.delay(3f),
                 Actions.run {
                     scoreLabel.clearActions()
-                    scoreLabel.addAction(Actions.sequence(
-                        Actions.fadeOut(.5f),
-                        Actions.run { tutorial = false },
-                        Actions.fadeIn(.5f)
-                    ))
+                    scoreLabel.addAction(
+                        Actions.sequence(
+                            Actions.fadeOut(.5f),
+                            Actions.run { tutorial = false },
+                            Actions.fadeIn(.5f)
+                        )
+                    )
                 }
             ))
         }
@@ -58,13 +60,7 @@ class Level1() : BaseLevelScreen("level1", 0) {
         super.cameraSetup()
 
         val camera = mainStage.camera as OrthographicCamera
-        if (Gdx.app.type == Application.ApplicationType.Android) {
-            camera.zoom = .4f // higher number = zoom out
-        } else {
-            camera.zoom = .7f // higher number = zoom out
-        }
-        camera.position.x = 350f // higher number = world to the left
-        camera.position.y = 500f
+        camera.zoom = .7f // higher number = zoom out
         camera.update()
     }
 
@@ -72,8 +68,6 @@ class Level1() : BaseLevelScreen("level1", 0) {
         changingScreen = true
         GameUtils.stopAllMusic()
         Overlay(0f, 0f, mainStage, comingIn = false)
-        /*if (!completedTheGame)
-            scoreLabel.setText("Score: 0")*/
         val temp = BaseActor(0f, 0f, mainStage)
         temp.addAction(
             Actions.sequence(
@@ -85,8 +79,7 @@ class Level1() : BaseLevelScreen("level1", 0) {
                             BaseGame.setActiveScreen(Level2(score))
                             if (Gdx.app.type == Application.ApplicationType.Android && BaseGame.gps != null && BaseGame.gps!!.isSignedIn())
                                 BaseGame.gps!!.submitScore(score)
-                        }
-                        else
+                        } else
                             BaseGame.setActiveScreen(Level2(0))
                     }
                 }

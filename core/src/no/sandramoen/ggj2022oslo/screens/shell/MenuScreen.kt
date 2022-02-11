@@ -28,9 +28,6 @@ class MenuScreen : BaseScreen() {
     override fun initialize() {
         tag = "MenuScreen.kt"
 
-        // audio
-        // GameUtils.playAndLoopMusic(BaseGame.levelMusic)
-
         // background
         Background(mainStage)
         cameraSetup()

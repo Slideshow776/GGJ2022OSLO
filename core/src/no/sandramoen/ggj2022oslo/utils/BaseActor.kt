@@ -48,6 +48,11 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
         setAnimationSize(width, height)
     }
 
+    fun setPixelSizeToRelativeSize(size: Int, test: Boolean = true) {
+        val relativeSize = GameUtils.normalizeValueOnTileMapAndRelativizeIt(size.toFloat())
+        setSize(relativeSize, relativeSize)
+    }
+
     override fun act(dt: Float) {
         if (!pause)
             super.act(dt)
@@ -274,6 +279,7 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
     }
 
     fun preventOverlap(other: BaseActor): Vector2? {
+        if (!collisionEnabled) return null
         val poly1: Polygon = this.getBoundaryPolygon()
         val poly2: Polygon = other.getBoundaryPolygon()
 

@@ -34,12 +34,12 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     var score: Int = incomingScore + maxLevelScore
     var incomingScore2 = incomingScore
     private var accumulatedScore: Int = maxLevelScore + incomingScore
-    private var timePassed: Float = 0f
+    var timePassed: Float = 0f
     private var spawnBrokenHearts = true
     var gameOver = false
-    private lateinit var joystickPosition: Vector3
+    private var joystickPosition: Vector3 = Vector3(0f, 0f, 0f)
     private var joystickDistance = 0f
-    private var joystickSlack = 25f
+    private var joystickSlack = 10f
     open var changingScreen = false
     open var completedTheLevel = false
     open var tutorial = false
@@ -135,32 +135,24 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     open fun cameraSetup() {}
 
     private fun checkRockCollision() {
-        for (rockActor: BaseActor in BaseActor.getList(mainStage, Rock::class.java.canonicalName)) {
-            for (player: BaseActor in BaseActor.getList(
-                mainStage,
-                Player::class.java.canonicalName
-            )) {
-                player.preventOverlap(rockActor)
+        for (rock: BaseActor in BaseActor.getList(mainStage, Rock::class.java.canonicalName)) {
+            for (player: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
+                if (timePassed > .5f)
+                    player.preventOverlap(rock)
             }
         }
     }
 
     private fun checkIfPlayerIsOnGround() {
-        for (playerActor: BaseActor in BaseActor.getList(
-            mainStage,
-            Player::class.java.canonicalName
-        )) {
+        for (playerActor: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
             var isTouchingGround = false
-            for (groundActor: BaseActor in BaseActor.getList(
-                mainStage,
-                Ground::class.java.canonicalName
-            )) {
+            for (groundActor: BaseActor in BaseActor.getList(mainStage, Ground::class.java.canonicalName)) {
                 if (playerActor.overlaps(groundActor)) {
                     isTouchingGround = true
                     break
                 }
             }
-            if (!isTouchingGround) { // game over
+            if (!isTouchingGround) {
                 playerActor as Player
                 playerActor.removeMe()
                 showGameOver()
@@ -189,24 +181,21 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
     }
 
     private fun checkGoldPickup() {
-        for (winActor: BaseActor in BaseActor.getList(mainStage, Gold::class.java.canonicalName)) {
-            for (playerActor: BaseActor in BaseActor.getList(
-                mainStage,
-                Player::class.java.canonicalName
-            )) {
+        for (goldActor: BaseActor in BaseActor.getList(mainStage, Gold::class.java.canonicalName)) {
+            for (playerActor: BaseActor in BaseActor.getList(mainStage, Player::class.java.canonicalName)) {
                 playerActor as Player
-                if (playerActor.overlaps(winActor)) {
-                    if (MathUtils.randomBoolean()) {
-                        BaseGame.trophyLSound!!.play(BaseGame.soundVolume)
-                    } else {
+                if (playerActor.alive && playerActor.overlaps(goldActor) && timePassed > 2f) {
+                    if (playerActor.woman) {
                         BaseGame.trophyRSound!!.play(BaseGame.soundVolume)
+                    } else {
+                        BaseGame.trophyLSound!!.play(BaseGame.soundVolume)
                     }
                     val effect = StarEffect()
-                    effect.setScale(Gdx.graphics.height * .0002f)
-                    effect.setPosition(winActor.x + 10f, winActor.y + 20f)
+                    effect.setScale(Gdx.graphics.height * .00002f)
+                    effect.setPosition(goldActor.x + goldActor.width / 2, goldActor.y + goldActor.height / 2)
                     mainStage.addActor(effect)
                     effect.start()
-                    winActor.remove()
+                    goldActor.remove()
                 }
             }
         }
@@ -283,26 +272,38 @@ open class BaseLevelScreen(var tiledLevel: String, incomingScore: Int = 0) : Bas
 
         for (obj in tma.getTileList("rock")) {
             val props = obj.properties
-            Rock(props.get("x") as Float, props.get("y") as Float, mainStage)
+            val xPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("x") as Float)
+            val yPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("y") as Float)
+            Rock(xPos, yPos, mainStage)
         }
 
         for (obj in tma.getTileList("ground")) {
             val props = obj.properties
-            Ground(props.get("x") as Float, props.get("y") as Float, mainStage)
+            val xPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("x") as Float)
+            val yPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("y") as Float)
+            Ground(xPos, yPos, mainStage)
         }
 
         try {
-            val startPoint = tma.getTileList("start")[0] // TODO: Warning: will crash if there is no start point in map
+            val startPoint = tma.getTileList("start")[0]
             val props = startPoint.properties
-            woman = Player(props.get("x") as Float, props.get("y") as Float, mainStage)
-            man = Player(props.get("x") as Float, props.get("y") as Float, mainStage, woman = false)
+
+            val xPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("x") as Float)
+            val yPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("y") as Float)
+
+            woman = Player(xPos, yPos, mainStage)
+            woman.accelerateAtAngle(180f)
+            man = Player(xPos, yPos, mainStage, woman = false)
+            man.accelerateAtAngle(180f)
         } catch (error: Error) {
             Gdx.app.error(tag, "Tilemap could not find a start point! error: $error")
         }
 
         for (obj in tma.getTileList("gold")) {
             val props = obj.properties
-            Gold(props.get("x") as Float, props.get("y") as Float, mainStage)
+            val xPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("x") as Float)
+            val yPos = GameUtils.normalizeValueOnTileMapAndRelativizeIt(props.get("y") as Float)
+            Gold(xPos, yPos, mainStage)
         }
     }
 }

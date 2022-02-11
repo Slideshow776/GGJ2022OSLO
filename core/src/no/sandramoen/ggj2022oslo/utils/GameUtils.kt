@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Widget
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import no.sandramoen.ggj2022oslo.actors.TilemapActor
 
 class GameUtils {
     companion object {
@@ -98,6 +99,10 @@ class GameUtils {
             val dividend = x - min
             val divisor = max - min
             return dividend / divisor
+        }
+
+        fun normalizeValueOnTileMapAndRelativizeIt(squarePixelSize: Float): Float {
+            return normalizeValues(squarePixelSize, 0f, TilemapActor.mapWidth) * BaseGame.WORLD_WIDTH
         }
 
         fun pulseWidget(actor: Actor, lowestAlpha: Float = .7f, duration: Float = 1f) {

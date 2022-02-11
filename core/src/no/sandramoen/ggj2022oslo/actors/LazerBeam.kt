@@ -1,6 +1,7 @@
 package no.sandramoen.ggj2022oslo.actors
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction
@@ -15,18 +16,18 @@ class LazerBeam(x: Float, y: Float, s: Stage, val goingDown: Boolean = true) : B
     var animationFinished = false
 
     private val targetY = y
-    private val lazerSpeed = .2f
     private var time = 0f
     private var topOutOfScreen = 1_000f
 
     init {
         loadImage("lazerBeam")
-        scaleBy(.1f, 20f)
+        setPixelSizeToRelativeSize(32)
+        scaleBy(1f, 200f)
         setOrigin(Align.bottom)
         startHeartEffects()
 
         if (goingDown) {
-            setPosition(x - 7, topOutOfScreen)
+            setPosition(x - 1, topOutOfScreen)
             startMusic()
             BaseGame.lazerBeamDownSound!!.play(BaseGame.soundVolume)
         } else {
@@ -40,10 +41,12 @@ class LazerBeam(x: Float, y: Float, s: Stage, val goingDown: Boolean = true) : B
         time += dt
 
         if (goingDown) {
-            addAction(Actions.sequence(
-                goDownAndShrink(),
-                removeWithDelay()
-            ))
+            addAction(
+                Actions.sequence(
+                    goDownAndShrink(),
+                    removeWithDelay()
+                )
+            )
         } else {
             addAction(Actions.sequence(
                 Actions.moveTo(x, topOutOfScreen),
@@ -61,8 +64,9 @@ class LazerBeam(x: Float, y: Float, s: Stage, val goingDown: Boolean = true) : B
 
     private fun goDownAndShrink(): SequenceAction? {
         return Actions.sequence(
-            Actions.moveTo(x, targetY, lazerSpeed),
-            Actions.scaleTo(1f, 0f, .1f)
+            Actions.moveTo(x, targetY, .1f),
+            Actions.delay(.1f),
+            Actions.scaleTo(2f, 0f, .1f)
         )
     }
 
@@ -77,8 +81,8 @@ class LazerBeam(x: Float, y: Float, s: Stage, val goingDown: Boolean = true) : B
     private fun addHeartEffects() {
         for (i in 0 until 20) {
             val effect = HeartEffect()
-            effect.setScale(Gdx.graphics.height * .0004f)
-            effect.setPosition(x + 10f, targetY + 20f)
+            effect.setScale(Gdx.graphics.height * .00006f)
+            effect.setPosition(x + 2f, targetY + 3)
             stage.addActor(effect)
             effect.start()
         }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -28,12 +29,17 @@ class HoveringLabel(x: Float, y: Float, s: Stage, woman: Boolean = true) : BaseA
             11 -> text = "When will I see you again?"
         }
         val label = Label("$text", BaseGame.labelStyle)
-        if (Gdx.app.type == Application.ApplicationType.Android) label.setFontScale(.125f)
-        else label.setFontScale(.2f)
         if (woman) label.color = Color.PINK
         else label.color = Color.CYAN
-        setPosition(x - label.prefWidth / 2, y)
-        addActor(label)
+
+        val group = Group()
+        group.addActor(label)
+        if (Gdx.app.type == Application.ApplicationType.Android)
+            group.setScale(.02f, .02f)
+        else
+            group.setScale(.035f, .035f)
+        group.setPosition(-5f, 3f)
+        addActor(group)
 
         addAction(
             Actions.parallel(
@@ -41,7 +47,7 @@ class HoveringLabel(x: Float, y: Float, s: Stage, woman: Boolean = true) : BaseA
                     Actions.delay(1f),
                     Actions.fadeOut(4f)
                 ),
-                Actions.moveBy(50f, 100f, 5f)
+                Actions.moveBy(5f, 10f, 5f)
             )
         )
     }
